@@ -1,29 +1,28 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"strconv"
+
+	"github.com/pterm/pterm"
 )
 
 func main() {
-	var dir, port string
-	fmt.Print("Provide directory to serve: ")
-	fmt.Scan(&dir)
+	dir, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").Show()
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		fmt.Println(err)
+		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	fmt.Print("Provide port to use: ")
-	fmt.Scan(&port)
+	port, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("80").Show()
 	p, err := strconv.Atoi(port)
 	if err != nil {
-		fmt.Println(err)
+		pterm.Error.Println(err)
 		os.Exit(1)
 	}
 	if p < 0 || p > 65535 {
-		fmt.Println("Port not in range!")
+		pterm.Error.Println("Port not in range!")
 		os.Exit(1)
 	}
-	Start(dir, uint16(p))
+	name, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
+	Start(dir, uint16(p), name)
 }
