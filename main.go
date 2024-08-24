@@ -13,6 +13,7 @@ func main() {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
+	name, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
 	port, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("80").Show()
 	p, err := strconv.Atoi(port)
 	if err != nil {
@@ -23,6 +24,5 @@ func main() {
 		pterm.Error.Println("Port not in range!")
 		os.Exit(1)
 	}
-	name, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
-	Start(dir, uint16(p), name)
+	Start(dir, name, uint16(p))
 }
