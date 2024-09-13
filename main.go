@@ -9,7 +9,7 @@ import (
 
 func main() {
 	dir, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").Show()
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
+	if _, err := os.Stat(dir); err != nil {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
