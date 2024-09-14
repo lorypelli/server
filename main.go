@@ -1,21 +1,33 @@
 package main
 
 import (
+	"flag"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/pterm/pterm"
 )
 
 func main() {
-	dir, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").Show()
-	if _, err := os.Stat(dir); err != nil {
+	dir := flag.String("d", "", "Directory to serve")
+	name := flag.String("n", "", "App name")
+	port := flag.String("p", "", "Port to use")
+	flag.Parse()
+	if strings.TrimSpace(*dir) == "" {
+		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").Show()
+	}
+	if _, err := os.Stat(*dir); err != nil {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	name, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
-	port, _ := pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("80").Show()
-	p, err := strconv.Atoi(port)
+	if strings.TrimSpace(*name) == "" {
+		*name, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
+	}
+	if strings.TrimSpace(*port) == "" {
+		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("80").Show()
+	}
+	p, err := strconv.Atoi(*port)
 	if err != nil {
 		pterm.Error.Println(err)
 		os.Exit(1)
@@ -24,5 +36,5 @@ func main() {
 		pterm.Error.Println("Port not in range!")
 		os.Exit(1)
 	}
-	Start(dir, name, uint16(p))
+	Start(*dir, *name, uint16(p))
 }
