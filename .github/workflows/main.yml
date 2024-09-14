@@ -29,9 +29,4 @@ jobs:
               with:
                 name: Release
                 tag_name: release
-            - name: Upload Assets
-              uses: alexellis/upload-assets@master
-              env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              with:
-                asset_paths: '["./bin/*"]'
+                files: bin/*
