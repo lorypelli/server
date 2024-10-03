@@ -21,6 +21,7 @@ func main() {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
+	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to use the .html extension?").WithDefaultValue(true).Show()
 	if strings.TrimSpace(*name) == "" {
 		*name, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
 	}
@@ -36,5 +37,5 @@ func main() {
 		pterm.Error.Println("Port not in range!")
 		os.Exit(1)
 	}
-	Start(*dir, *name, uint16(p))
+	Start(*dir, *name, extension, uint16(p))
 }
