@@ -15,7 +15,7 @@ func main() {
 	port := flag.String("p", "", "Port to use")
 	flag.Parse()
 	if strings.TrimSpace(*dir) == "" {
-		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").Show()
+		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").WithDefaultValue(".").Show()
 	}
 	if _, err := os.Stat(*dir); err != nil {
 		pterm.Error.Println(err)
