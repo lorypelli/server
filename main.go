@@ -17,6 +17,7 @@ func main() {
 	if strings.TrimSpace(*dir) == "" {
 		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").WithDefaultValue(".").Show()
 	}
+	*dir = strings.TrimSpace(*dir)
 	if _, err := os.Stat(*dir); err != nil {
 		pterm.Error.Println(err)
 		os.Exit(1)
@@ -25,9 +26,11 @@ func main() {
 	if strings.TrimSpace(*name) == "" {
 		*name, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
 	}
+	*name = strings.TrimSpace(*name)
 	if strings.TrimSpace(*port) == "" {
 		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("80").Show()
 	}
+	*port = strings.TrimSpace(*port)
 	p, err := strconv.Atoi(*port)
 	if err != nil {
 		pterm.Error.Println(err)
