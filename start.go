@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/pterm/pterm"
 )
 
@@ -14,12 +15,11 @@ func Start(dir, name string, extension bool, port uint16) {
 		AppName:      name,
 		ServerHeader: name,
 	})
-	app.Use(func(ctx *fiber.Ctx) error {
-		ctx.Set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0")
+	app.Use(logger.New(), func(ctx *fiber.Ctx) error {
 		path := ctx.Path()
 		t := ctx.Query("t")
 		time := time.Now().Unix()
-		if strings.TrimSpace(t) == "" || t < pterm.Sprint(time) {
+		if t < pterm.Sprint(time) {
 			return ctx.Redirect(pterm.Sprintf("%s?t=%d", path, time))
 		}
 		return ctx.Next()
