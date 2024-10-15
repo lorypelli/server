@@ -18,9 +18,9 @@ func Start(dir, name string, extension bool, port uint16) {
 	app.Use(logger.New(), func(ctx *fiber.Ctx) error {
 		path := ctx.Path()
 		t := ctx.Query("t")
-		time := time.Now().Unix()
-		if t < pterm.Sprint(time) {
-			return ctx.Redirect(pterm.Sprintf("%s?t=%d", path, time))
+		time := pterm.Sprint(time.Now().Unix())
+		if t < time || t > time {
+			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, time))
 		}
 		return ctx.Next()
 	})
