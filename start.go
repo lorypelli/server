@@ -19,7 +19,7 @@ func Start(dir, name string, extension bool, port uint16) {
 		path := ctx.Path()
 		t := ctx.Query("t")
 		time := pterm.Sprint(time.Now().Unix())
-		if t < time || t > time {
+		if t != time {
 			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, time))
 		}
 		return ctx.Next()
