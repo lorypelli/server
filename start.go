@@ -10,7 +10,7 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func Start(dir, name string, extension bool, port uint16) {
+func Start(dir, name string, extension bool, port int) {
 	app := fiber.New(fiber.Config{
 		AppName:      name,
 		ServerHeader: name,

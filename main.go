@@ -36,9 +36,5 @@ func main() {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	if p < 1 || p > 65535 {
-		pterm.Error.Println("Port not in range!")
-		os.Exit(1)
-	}
-	Start(*dir, *name, extension, uint16(p))
+	Start(*dir, *name, extension, p)
 }
