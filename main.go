@@ -28,7 +28,7 @@ func main() {
 	}
 	*name = strings.TrimSpace(*name)
 	if strings.TrimSpace(*port) == "" {
-		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("80").Show()
+		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("53273").Show()
 	}
 	*port = strings.TrimSpace(*port)
 	p, err := strconv.Atoi(*port)
