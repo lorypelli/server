@@ -36,7 +36,7 @@ func main() {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	if p < 0 || p > 65535 {
+	if p < 1 || p > 65535 {
 		pterm.Error.Println("Port not in range!")
 		os.Exit(1)
 	}
