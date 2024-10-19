@@ -7,6 +7,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/websocket/v2"
 	"github.com/pterm/pterm"
 )
 
@@ -15,15 +16,13 @@ func Start(dir, name string, extension bool, port int) {
 		AppName:      name,
 		ServerHeader: name,
 	})
-	app.Use(logger.New(), func(ctx *fiber.Ctx) error {
-		path := ctx.Path()
-		t := ctx.Query("t")
-		time := pterm.Sprint(time.Now().Unix())
-		if t != time {
-			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, time))
+	app.Get("/ws", websocket.New(func(ctx *websocket.Conn) {
+		hasChanged := make(chan bool)
+		go Monitor(dir, hasChanged)
+		if <-hasChanged {
+			ctx.WriteMessage(websocket.TextMessage, []byte("reload"))
 		}
-		return ctx.Next()
-	})
+	}))
 	if !extension {
 		app.Use(func(ctx *fiber.Ctx) error {
 			path := ctx.Path()
@@ -35,6 +34,30 @@ func Start(dir, name string, extension bool, port int) {
 			return ctx.Next()
 		})
 	}
+	app.Use(logger.New(), func(ctx *fiber.Ctx) error {
+		t := ctx.Query("t")
+		time := pterm.Sprint(time.Now().Unix())
+		path := ctx.Path()
+		file := strings.TrimPrefix(path, "/")
+		if file == "" {
+			file += "index.html"
+		} else if !strings.Contains(file, ".") && !extension {
+			file += ".html"
+		}
+		if t != time {
+			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, time))
+		}
+		if strings.HasSuffix(file, ".html") {
+			body, err := os.ReadFile(file)
+			if err != nil {
+				return ctx.Next()
+			}
+			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>const ws=new WebSocket('ws://127.0.0.1:%d/ws');ws.onmessage=(e)=>{if(e.data == 'reload')location.reload();}</script></body>", port)))
+			ctx.Set("Content-Type", "text/html")
+			return ctx.Send(body)
+		}
+		return ctx.Next()
+	})
 	app.Static("/", dir)
 	if err := app.Listen(pterm.Sprintf("127.0.0.1:%d", port)); err != nil {
 		pterm.Error.Println(err)
