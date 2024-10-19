@@ -17,6 +17,7 @@ func Start(dir, name string, extension bool, port int) {
 		ServerHeader: name,
 	})
 	app.Get("/ws", websocket.New(func(ctx *websocket.Conn) {
+		defer ctx.Close()
 		hasChanged := make(chan bool)
 		go Monitor(dir, hasChanged)
 		if <-hasChanged {
