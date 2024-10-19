@@ -53,7 +53,7 @@ func Start(dir, name string, extension bool, port int) {
 			if err != nil {
 				return ctx.Next()
 			}
-			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>const ws=new WebSocket('ws://127.0.0.1:%d/ws');ws.onmessage=(e)=>{if(e.data == 'reload')location.reload();}</script></body>", port)))
+			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://127.0.0.1:%d/ws').onmessage=e=>{e.data=='reload'&&location.reload()}</script></body>", port)))
 			ctx.Set("Content-Type", "text/html")
 			return ctx.Send(body)
 		}
