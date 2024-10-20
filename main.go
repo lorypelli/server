@@ -23,6 +23,7 @@ func main() {
 		os.Exit(1)
 	}
 	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to use the .html extension?").WithDefaultValue(true).Show()
+	realtime, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to have realtime loading for .html files?").Show()
 	if strings.TrimSpace(*name) == "" {
 		*name, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
 	}
@@ -36,5 +37,10 @@ func main() {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
+	go func() {
+		if realtime {
+			StartWebsocket(*dir)
+		}
+	}()
 	Start(*dir, *name, extension, p)
 }
