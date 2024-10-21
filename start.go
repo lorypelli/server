@@ -45,7 +45,7 @@ func Start(dir, name string, extension bool, port int) {
 			if err != nil {
 				return ctx.Next()
 			}
-			body = []byte(strings.ReplaceAll(string(body), "</body>", "<script>new WebSocket('ws://127.0.0.1:50643').onmessage=e=>{e.data=='reload'&&location.reload()}</script></body>"))
+			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://127.0.0.1:%d').onmessage=e=>{e.data=='reload'&&location.reload()}</script></body>", WS_PORT)))
 			ctx.Set("Content-Type", "text/html")
 			return ctx.Send(body)
 		}
@@ -58,7 +58,7 @@ func Start(dir, name string, extension bool, port int) {
 	}
 }
 
-func StartWebsocket(dir string) {
+func StartWebsocket(dir string, port int) {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})
@@ -70,7 +70,7 @@ func StartWebsocket(dir string) {
 			ctx.WriteMessage(websocket.TextMessage, []byte("reload"))
 		}
 	}))
-	if err := app.Listen("127.0.0.1:50643"); err != nil {
+	if err := app.Listen(pterm.Sprintf("127.0.0.1:%d", port)); err != nil {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}

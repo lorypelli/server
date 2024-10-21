@@ -9,6 +9,8 @@ import (
 	"github.com/pterm/pterm"
 )
 
+const WS_PORT = 50643
+
 func main() {
 	dir := flag.String("d", "", "Directory to serve")
 	name := flag.String("n", "", "App name")
@@ -24,6 +26,9 @@ func main() {
 	}
 	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to use the .html extension?").WithDefaultValue(true).Show()
 	realtime, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to have realtime loading for .html files?").Show()
+	if realtime {
+		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
+	}
 	if strings.TrimSpace(*name) == "" {
 		*name, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
 	}
@@ -39,7 +44,7 @@ func main() {
 	}
 	go func() {
 		if realtime {
-			StartWebsocket(*dir)
+			StartWebsocket(*dir, WS_PORT)
 		}
 	}()
 	Start(*dir, *name, extension, p)
