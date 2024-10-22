@@ -24,8 +24,8 @@ func main() {
 		pterm.Error.Println(err)
 		os.Exit(1)
 	}
-	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to use the .html extension?").WithDefaultValue(true).Show()
-	realtime, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to have realtime loading for .html files?").Show()
+	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to use the HTML extension?").WithDefaultValue(true).Show()
+	realtime, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to have realtime loading for HTML files?").Show()
 	if realtime {
 		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
 	}
@@ -47,5 +47,5 @@ func main() {
 			StartWebsocket(*dir, WS_PORT)
 		}
 	}()
-	Start(*dir, *name, extension, p)
+	Start(*dir, *name, extension, realtime, p, WS_PORT)
 }

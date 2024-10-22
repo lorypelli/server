@@ -11,7 +11,7 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func Start(dir, name string, extension bool, port int) {
+func Start(dir, name string, extension, realtime bool, port, ws_port int) {
 	app := fiber.New(fiber.Config{
 		AppName:      name,
 		ServerHeader: name,
@@ -40,12 +40,12 @@ func Start(dir, name string, extension bool, port int) {
 		if t != time {
 			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, time))
 		}
-		if strings.HasSuffix(file, ".html") {
+		if realtime && strings.HasSuffix(file, ".html") {
 			body, err := os.ReadFile(file)
 			if err != nil {
 				return ctx.Next()
 			}
-			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://127.0.0.1:%d').onmessage=e=>{e.data=='reload'&&location.reload()}</script></body>", WS_PORT)))
+			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://127.0.0.1:%d').onmessage=e=>e.data=='reload'&&location.reload()</script></body>", ws_port)))
 			ctx.Set("Content-Type", "text/html")
 			return ctx.Send(body)
 		}
