@@ -17,10 +17,6 @@ func main() {
 	name := flag.String("n", "", "App name")
 	port := flag.String("p", "", "Port to use")
 	flag.Parse()
-	*dir = strings.TrimSpace(*dir)
-	*ext = strings.TrimSpace(*ext)
-	*name = strings.TrimSpace(*name)
-	*port = strings.TrimSpace(*port)
 	if *dir == "" {
 		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").WithDefaultValue(".").Show()
 	}
@@ -42,6 +38,10 @@ func main() {
 	if *port == "" {
 		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("53273").Show()
 	}
+	*dir = strings.TrimSpace(*dir)
+	*ext = strings.TrimSpace(*ext)
+	*name = strings.TrimSpace(*name)
+	*port = strings.TrimSpace(*port)
 	p, err := strconv.Atoi(*port)
 	if err != nil {
 		pterm.Error.Println(err)
