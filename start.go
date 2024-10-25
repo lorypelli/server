@@ -55,8 +55,7 @@ func Start(dir, ext, name string, extension, realtime bool, port, ws_port int) {
 		Index: "index" + ext,
 	})
 	if err := app.Listen(pterm.Sprintf("127.0.0.1:%d", port)); err != nil {
-		pterm.Error.Println(err)
-		os.Exit(1)
+		Exit(err)
 	}
 }
 
@@ -73,7 +72,6 @@ func StartWebsocket(dir string, port int) {
 		}
 	}))
 	if err := app.Listen(pterm.Sprintf("127.0.0.1:%d", port)); err != nil {
-		pterm.Error.Println(err)
-		os.Exit(1)
+		Exit(err)
 	}
 }

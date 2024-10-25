@@ -17,35 +17,37 @@ func main() {
 	name := flag.String("n", "", "App name")
 	port := flag.String("p", "", "Port to use")
 	flag.Parse()
+	*dir = strings.TrimSpace(*dir)
+	*ext = strings.TrimSpace(*ext)
+	*name = strings.TrimSpace(*name)
+	*port = strings.TrimSpace(*port)
 	if *dir == "" {
-		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide directory to serve").WithDefaultValue(".").Show()
+		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(".").Show("Provide directory to serve")
+		*dir = strings.TrimSpace(*dir)
 	}
 	if _, err := os.Stat(*dir); err != nil {
-		pterm.Error.Println(err)
-		os.Exit(1)
+		Exit(err)
 	}
-	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to use the HTML extension?").WithDefaultValue(true).Show()
-	realtime, _ := pterm.DefaultInteractiveConfirm.WithDefaultText("Do you want to have realtime loading for HTML files?").Show()
+	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultValue(true).Show("Do you want to use the HTML extension?")
+	realtime, _ := pterm.DefaultInteractiveConfirm.Show("Do you want to have realtime loading for HTML files?")
 	if *ext != ".html" && *ext != ".htm" {
-		*ext, _ = pterm.DefaultInteractiveSelect.WithDefaultText("Choose HTML extension").WithOptions([]string{".html", ".htm"}).Show()
+		*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm"}).Show("Choose HTML extension")
+		*ext = strings.TrimSpace(*ext)
 	}
 	if realtime {
 		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
 	}
 	if *name == "" {
-		*name, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide app name").Show()
+		*name, _ = pterm.DefaultInteractiveTextInput.Show("Provide app name")
+		*name = strings.TrimSpace(*name)
 	}
 	if *port == "" {
-		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultText("Provide port to use").WithDefaultValue("53273").Show()
+		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue("53273").Show("Provide port to use")
+		*port = strings.TrimSpace(*port)
 	}
-	*dir = strings.TrimSpace(*dir)
-	*ext = strings.TrimSpace(*ext)
-	*name = strings.TrimSpace(*name)
-	*port = strings.TrimSpace(*port)
 	p, err := strconv.Atoi(*port)
 	if err != nil {
-		pterm.Error.Println(err)
-		os.Exit(1)
+		Exit(err)
 	}
 	go func() {
 		if realtime {
