@@ -30,12 +30,12 @@ func main() {
 	}
 	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultValue(true).Show("Do you want to use the HTML extension?")
 	realtime, _ := pterm.DefaultInteractiveConfirm.Show("Do you want to have realtime loading for HTML files?")
+	if realtime {
+		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
+	}
 	if *ext != ".html" && *ext != ".htm" {
 		*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm"}).Show("Choose HTML extension")
 		*ext = strings.TrimSpace(*ext)
-	}
-	if realtime {
-		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
 	}
 	if *name == "" {
 		*name, _ = pterm.DefaultInteractiveTextInput.Show("Provide app name")
