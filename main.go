@@ -21,7 +21,7 @@ func main() {
 	*ext = strings.TrimSpace(*ext)
 	*name = strings.TrimSpace(*name)
 	*port = strings.TrimSpace(*port)
-	if *dir == "" {
+	for *dir == "" {
 		*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(".").Show("Provide directory to serve")
 		*dir = strings.TrimSpace(*dir)
 	}
@@ -33,7 +33,7 @@ func main() {
 	if realtime {
 		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
 	}
-	if *ext != ".html" && *ext != ".htm" {
+	for *ext != ".html" && *ext != ".htm" {
 		*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm"}).Show("Choose HTML extension")
 		*ext = strings.TrimSpace(*ext)
 	}
@@ -41,7 +41,7 @@ func main() {
 		*name, _ = pterm.DefaultInteractiveTextInput.Show("Provide app name")
 		*name = strings.TrimSpace(*name)
 	}
-	if *port == "" {
+	for *port == "" || (realtime && *port == pterm.Sprint(WS_PORT)) {
 		*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue("53273").Show("Provide port to use")
 		*port = strings.TrimSpace(*port)
 	}
@@ -54,5 +54,5 @@ func main() {
 			StartWebsocket(*dir, WS_PORT)
 		}
 	}()
-	Start(*dir, *ext, *name, extension, realtime, p, WS_PORT)
+	Start(*dir, *ext, *name, extension, realtime, uint16(p), WS_PORT)
 }
