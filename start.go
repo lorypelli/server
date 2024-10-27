@@ -11,7 +11,7 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func Start(dir, ext, name string, extension, realtime bool, port, ws_port int) {
+func Start(dir, ext, name string, extension, realtime bool, port int, ws_port uint16) {
 	app := fiber.New(fiber.Config{
 		AppName:      name,
 		ServerHeader: name,
@@ -59,7 +59,7 @@ func Start(dir, ext, name string, extension, realtime bool, port, ws_port int) {
 	}
 }
 
-func StartWebsocket(dir string, port int) {
+func StartWebsocket(dir string, port uint16) {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})

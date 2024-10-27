@@ -9,7 +9,7 @@ import (
 	"github.com/pterm/pterm"
 )
 
-const WS_PORT = 50643
+const WS_PORT uint16 = 50643
 
 func main() {
 	dir := flag.String("d", "", "Directory to serve")
