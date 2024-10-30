@@ -11,11 +11,15 @@ import (
 	"github.com/pterm/pterm"
 )
 
-func Start(dir, ext, name string, extension, realtime bool, port, ws_port uint16) {
+func Start(dir, ext, name string, extension, network, realtime bool, port, ws_port uint16) {
 	app := fiber.New(fiber.Config{
-		AppName:      name,
-		ServerHeader: name,
+		AppName:               name,
+		ServerHeader:          name,
+		DisableStartupMessage: true,
 	})
+	if !network {
+		IP = LocalIP
+	}
 	if !extension {
 		app.Use(func(ctx *fiber.Ctx) error {
 			path := ctx.Path()
@@ -45,7 +49,7 @@ func Start(dir, ext, name string, extension, realtime bool, port, ws_port uint16
 			if err != nil {
 				return ctx.Next()
 			}
-			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://127.0.0.1:%d').onmessage=e=>e.data=='reload'&&location.reload()</script></body>", ws_port)))
+			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://%s:%d').onmessage=e=>e.data=='reload'&&location.reload()</script></body>", IP, ws_port)))
 			ctx.Set("Content-Type", "text/html")
 			return ctx.Send(body)
 		}
@@ -54,8 +58,17 @@ func Start(dir, ext, name string, extension, realtime bool, port, ws_port uint16
 	app.Static("/", dir, fiber.Static{
 		Index: "index" + ext,
 	})
-	if err := app.Listen(pterm.Sprintf("127.0.0.1:%d", port)); err != nil {
-		Exit(err)
+	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
+	if IP != LocalIP {
+		box.Printfln("Local: http://%s:%d\nNetwork: http://%s:%d", LocalIP, port, IP, port)
+		if err := app.Listen(pterm.Sprintf(":%d", port)); err != nil {
+			Exit(err)
+		}
+	} else {
+		box.Printfln("Local: http://%s:%d", LocalIP, port)
+		if err := app.Listen(pterm.Sprintf("%s:%d", LocalIP, port)); err != nil {
+			Exit(err)
+		}
 	}
 }
 
@@ -71,7 +84,13 @@ func StartWebsocket(dir string, port uint16) {
 			ctx.WriteMessage(websocket.TextMessage, []byte("reload"))
 		}
 	}))
-	if err := app.Listen(pterm.Sprintf("127.0.0.1:%d", port)); err != nil {
-		Exit(err)
+	if IP != LocalIP {
+		if err := app.Listen(pterm.Sprintf(":%d", port)); err != nil {
+			Exit(err)
+		}
+	} else {
+		if err := app.Listen(pterm.Sprintf("%s:%d", LocalIP, port)); err != nil {
+			Exit(err)
+		}
 	}
 }

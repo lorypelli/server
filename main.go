@@ -11,6 +11,10 @@ import (
 
 const WS_PORT uint16 = 50643
 
+var IP = GetLocalIP();
+
+var LocalIP = "127.0.0.1"
+
 func main() {
 	dir := flag.String("d", "", "Directory to serve")
 	ext := flag.String("e", "", "Extension to use")
@@ -33,6 +37,7 @@ func main() {
 	if realtime {
 		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
 	}
+	network, _ := pterm.DefaultInteractiveConfirm.Show("Do you want to expose also to the local network?")
 	for *ext != ".html" && *ext != ".htm" {
 		*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm"}).Show("Choose HTML extension")
 		*ext = strings.TrimSpace(*ext)
@@ -54,5 +59,5 @@ func main() {
 			StartWebsocket(*dir, WS_PORT)
 		}
 	}()
-	Start(*dir, *ext, *name, extension, realtime, uint16(p), WS_PORT)
+	Start(*dir, *ext, *name, extension, network, realtime, uint16(p), WS_PORT)
 }

@@ -1,11 +1,10 @@
+SRC := ${wildcard *.go}
 windows:
-	@GOOS=windows go build -o bin/server_win32.exe main.go start.go changes.go exit.go
+	@GOOS=windows go build -o bin/server_$@.exe ${SRC}
 linux:
-	@GOOS=linux go build -o bin/server_linux main.go start.go changes.go exit.go
+	@GOOS=linux go build -o bin/server_$@ ${SRC}
 darwin:
-	@GOOS=darwin go build -o bin/server_darwin main.go start.go changes.go exit.go
-build:
-	@go build -o server.exe main.go start.go changes-go exit.go
+	@GOOS=darwin go build -o bin/server_$@ ${SRC}
 run:
-	@go run main.go start.go changes.go exit.go
+	@go run ${SRC}
 all: windows linux darwin
