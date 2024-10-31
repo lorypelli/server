@@ -1,4 +1,4 @@
-package main
+package pkg
 
 import (
 	"os"
@@ -8,8 +8,13 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/websocket/v2"
+	"github.com/lorypelli/server/internal"
 	"github.com/pterm/pterm"
 )
+
+var IP = internal.GetLocalIP()
+
+var LocalIP = "127.0.0.1"
 
 func Start(dir, ext, name string, extension, network, realtime bool, port, ws_port uint16) {
 	app := fiber.New(fiber.Config{
@@ -62,12 +67,12 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 	if IP != LocalIP {
 		box.Printfln("Local: http://%s:%d\nNetwork: http://%s:%d", LocalIP, port, IP, port)
 		if err := app.Listen(pterm.Sprintf(":%d", port)); err != nil {
-			Exit(err)
+			internal.Exit(err)
 		}
 	} else {
 		box.Printfln("Local: http://%s:%d", LocalIP, port)
 		if err := app.Listen(pterm.Sprintf("%s:%d", LocalIP, port)); err != nil {
-			Exit(err)
+			internal.Exit(err)
 		}
 	}
 }
@@ -86,11 +91,11 @@ func StartWebsocket(dir string, port uint16) {
 	}))
 	if IP != LocalIP {
 		if err := app.Listen(pterm.Sprintf(":%d", port)); err != nil {
-			Exit(err)
+			internal.Exit(err)
 		}
 	} else {
 		if err := app.Listen(pterm.Sprintf("%s:%d", LocalIP, port)); err != nil {
-			Exit(err)
+			internal.Exit(err)
 		}
 	}
 }

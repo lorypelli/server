@@ -1,4 +1,4 @@
-SRC := ${wildcard *.go}
+SRC := cmd/server/main.go
 win32:
 	@GOOS=windows go build -o bin/server_$@.exe ${SRC}
 linux:

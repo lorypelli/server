@@ -6,14 +6,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/lorypelli/server/internal"
+	"github.com/lorypelli/server/pkg"
 	"github.com/pterm/pterm"
 )
 
 const WS_PORT uint16 = 50643
-
-var IP = GetLocalIP();
-
-var LocalIP = "127.0.0.1"
 
 func main() {
 	dir := flag.String("d", "", "Directory to serve")
@@ -30,7 +28,7 @@ func main() {
 		*dir = strings.TrimSpace(*dir)
 	}
 	if _, err := os.Stat(*dir); err != nil {
-		Exit(err)
+		internal.Exit(err)
 	}
 	extension, _ := pterm.DefaultInteractiveConfirm.WithDefaultValue(true).Show("Do you want to use the HTML extension?")
 	realtime, _ := pterm.DefaultInteractiveConfirm.Show("Do you want to have realtime loading for HTML files?")
@@ -52,12 +50,12 @@ func main() {
 	}
 	p, err := strconv.Atoi(*port)
 	if err != nil {
-		Exit(err)
+		internal.Exit(err)
 	}
 	go func() {
 		if realtime {
-			StartWebsocket(*dir, WS_PORT)
+			pkg.StartWebsocket(*dir, WS_PORT)
 		}
 	}()
-	Start(*dir, *ext, *name, extension, network, realtime, uint16(p), WS_PORT)
+	pkg.Start(*dir, *ext, *name, extension, network, realtime, uint16(p), WS_PORT)
 }
