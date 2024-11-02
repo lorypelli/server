@@ -6,5 +6,5 @@ linux:
 darwin:
 	@GOOS=darwin go build -o bin/server_$@ ${SRC}
 run:
-	@go run ${SRC}
+	@templ generate && go run ${SRC}
 all: win32 linux darwin
