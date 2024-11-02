@@ -5,6 +5,9 @@ linux:
 	@GOOS=linux go build -o bin/server_$@ ${SRC}
 darwin:
 	@GOOS=darwin go build -o bin/server_$@ ${SRC}
+watch:
+	@templ generate -watch
 run:
-	@templ generate && go run ${SRC}
-all: win32 linux darwin
+	@go run ${SRC}
+start:
+	@make -j 2 watch run

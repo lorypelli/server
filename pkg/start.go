@@ -65,7 +65,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		Index: "index" + ext,
 	})
 	app.Use(func(c *fiber.Ctx) error {
-		return internal.Render(c, t.Hello("test"))
+		return internal.Render(c, t.Index())
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
 	if IP != LocalIP {
