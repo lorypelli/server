@@ -9,6 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/websocket/v2"
 	"github.com/lorypelli/server/internal"
+	t "github.com/lorypelli/server/templ"
 	"github.com/pterm/pterm"
 )
 
@@ -62,6 +63,9 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 	})
 	app.Static("/", dir, fiber.Static{
 		Index: "index" + ext,
+	})
+	app.Use(func(c *fiber.Ctx) error {
+		return internal.Render(c, t.Hello("test"))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
 	if IP != LocalIP {
