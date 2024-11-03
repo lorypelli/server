@@ -8,7 +8,7 @@ import (
 )
 
 func RenderCSS() string {
-	body, _ := os.ReadFile("templ/style.css")
+	body, _ := os.ReadFile("templ/styles/style.css")
 	css, _ := minify.CSS(string(body))
 	return pterm.Sprintf("<style>%s</style>", css)
 }

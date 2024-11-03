@@ -13,8 +13,19 @@ a {
     color: black;
 }
 
+a:hover {
+    text-decoration: underline;
+}
+
 .error {
     color: red;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
 }
 
 .dir {

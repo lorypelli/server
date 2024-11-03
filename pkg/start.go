@@ -67,17 +67,18 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 	})
 	app.Use(func(ctx *fiber.Ctx) error {
 		path := strings.Split(ctx.Path(), "/")
-		var p string
-		if len(path) < 2 {
-			p = dir
-		} else {
-			p = dir + strings.Join(path[1:], "/")
-		}
-		abs, err := filepath.Abs(p)
+		p, err := filepath.Abs(dir)
 		if err != nil {
 			return ctx.Next()
 		}
-		return internal.Render(ctx, t.Index(abs))
+		if len(path) >= 2 {
+			p += "/" + strings.Join(path[1:], "/")
+		}
+		p, err = filepath.Abs(p)
+		if err != nil {
+			return ctx.Next()
+		}
+		return internal.Render(ctx, t.Index(ctx.Path(), p))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
 	if IP != LocalIP {

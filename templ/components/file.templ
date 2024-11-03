@@ -1,0 +1,20 @@
+package components
+
+import (
+	utils "github.com/lorypelli/server/templ/utils"
+	"path/filepath"
+)
+
+templ File(path string, dir string, f utils.File) {
+	<div class="file">
+		if path == "/" {
+			<a href={ templ.URL(f.Name) }>
+				<span>{ f.Name }</span>
+			</a>
+		} else {
+			<a href={ templ.URL(filepath.Base(dir) + "/" + f.Name) }>
+				<span>{ f.Name }</span>
+			</a>
+		}
+	</div>
+}
