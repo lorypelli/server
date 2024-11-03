@@ -1,15 +1,26 @@
 package templ
 
-templ Index() {
+templ Index(dir string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<title>Not Found!</title>
+			@templ.Raw(RenderCSS())
 		</head>
 		<body>
-			<span>The page you were looking for wasn't found!</span>
+			<span class="error">The page you were looking for wasn't found!</span>
+			<span>Contents of: <span class="dir">{ dir }</span></span>
+			<div class="files">
+				for _, file := range GetFiles(dir) {
+					<div class="file">
+						<a href={ templ.URL(file.name) }>
+							<span>{ file.name }</span>
+						</a>
+					</div>
+				}
+			</div>
 		</body>
 	</html>
 }

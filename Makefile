@@ -8,6 +8,6 @@ darwin:
 watch:
 	@templ generate -watch
 run:
-	@go run ${SRC}
+	@go fmt all && go run ${SRC}
 start:
 	@make -j 2 watch run

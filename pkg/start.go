@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -64,8 +65,19 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 	app.Static("/", dir, fiber.Static{
 		Index: "index" + ext,
 	})
-	app.Use(func(c *fiber.Ctx) error {
-		return internal.Render(c, t.Index())
+	app.Use(func(ctx *fiber.Ctx) error {
+		path := strings.Split(ctx.Path(), "/")
+		var p string
+		if len(path) < 2 {
+			p = dir
+		} else {
+			p = dir + strings.Join(path[1:], "/")
+		}
+		abs, err := filepath.Abs(p)
+		if err != nil {
+			return ctx.Next()
+		}
+		return internal.Render(ctx, t.Index(abs))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
 	if IP != LocalIP {
