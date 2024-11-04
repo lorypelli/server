@@ -6,8 +6,6 @@ linux:
 darwin:
 	@GOOS=darwin go build -o bin/server_$@ $(SRC)
 watch:
-	@templ generate -watch
+	@templ fmt . && templ generate -watch
 run:
 	@go fmt all && go run $(SRC)
-start:
-	@$(MAKE) -j2 watch run
