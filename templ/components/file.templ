@@ -7,6 +7,11 @@ import (
 
 templ File(path string, dir string, f utils.File) {
 	<div class="file">
+		if f.IsDir {
+			@FolderIcon()
+		} else {
+			@FileIcon()
+		}
 		if path == "/" {
 			<a href={ templ.URL(f.Name) }>
 				<span>{ f.Name }</span>

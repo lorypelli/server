@@ -78,6 +78,12 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		if err != nil {
 			return ctx.Next()
 		}
+		if _, err := os.Stat(p); os.IsNotExist(err) {
+			p, err = filepath.Abs(".")
+			if err != nil {
+				return ctx.Next()
+			}
+		}
 		return internal.Render(ctx, t.Index(ctx.Path(), p))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()

@@ -17,6 +17,12 @@ a:hover {
     text-decoration: underline;
 }
 
+svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: black;
+}
+
 .error {
     color: red;
 }
@@ -38,4 +44,10 @@ a:hover {
     flex-wrap: wrap;
     gap: .5rem;
     justify-content: center;
+}
+
+.file {
+    border: .25rem solid;
+    border-radius: .5rem;
+    padding: .5rem;
 }
