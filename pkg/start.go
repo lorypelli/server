@@ -2,6 +2,7 @@ package pkg
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/websocket/v2"
 	"github.com/lorypelli/server/internal"
+	t "github.com/lorypelli/server/templ"
 	"github.com/pterm/pterm"
 )
 
@@ -62,6 +64,27 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 	})
 	app.Static("/", dir, fiber.Static{
 		Index: "index" + ext,
+	})
+	app.Use(func(ctx *fiber.Ctx) error {
+		path := strings.Split(ctx.Path(), "/")
+		p, err := filepath.Abs(dir)
+		if err != nil {
+			return ctx.Next()
+		}
+		if len(path) >= 2 {
+			p += "/" + strings.Join(path[1:], "/")
+		}
+		p, err = filepath.Abs(p)
+		if err != nil {
+			return ctx.Next()
+		}
+		if _, err := os.Stat(p); os.IsNotExist(err) {
+			p, err = filepath.Abs(".")
+			if err != nil {
+				return ctx.Next()
+			}
+		}
+		return internal.Render(ctx, t.Index(ctx.Path(), p))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
 	if IP != LocalIP {

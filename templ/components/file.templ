@@ -1,0 +1,16 @@
+package components
+
+import "github.com/lorypelli/server/templ/utils"
+
+templ File(path string, dir string, f utils.File) {
+	<div class="file">
+		if f.IsDir {
+			@FolderIcon()
+		} else {
+			@FileIcon()
+		}
+		<a href={ utils.GetURL(path, dir, f) }>
+			<span>{ f.Name }</span>
+		</a>
+	</div>
+}

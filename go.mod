@@ -3,9 +3,11 @@ module github.com/lorypelli/server
 go 1.23.2
 
 require (
+	github.com/a-h/templ v0.2.793
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/websocket/v2 v2.2.1
 	github.com/pterm/pterm v0.12.79
+	github.com/tdewolff/minify/v2 v2.21.1
 )
 
 require (
@@ -24,8 +26,9 @@ require (
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
+	github.com/tdewolff/parse/v2 v2.7.19 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.56.0 // indirect
+	github.com/valyala/fasthttp v1.57.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/net v0.30.0 // indirect

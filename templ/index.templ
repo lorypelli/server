@@ -1,0 +1,35 @@
+package templ
+
+import (
+	"github.com/lorypelli/server/templ/components"
+	"github.com/lorypelli/server/templ/utils"
+	"path/filepath"
+)
+
+templ Index(path string, dir string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>Not Found!</title>
+			@templ.Raw(utils.RenderCSS())
+		</head>
+		<body>
+			<span class="error">The page you were looking for wasn't found!</span>
+			<div class="main">
+				if path != "/" {
+					<a href={ templ.URL(filepath.Dir(path)) }>
+						@components.BackArrow()
+					</a>
+				}
+				<span>Contents of: <span class="dir">{ dir }</span></span>
+			</div>
+			<div class="files">
+				for _, file := range utils.GetFiles(dir) {
+					@components.File(path, dir, file)
+				}
+			</div>
+		</body>
+	</html>
+}

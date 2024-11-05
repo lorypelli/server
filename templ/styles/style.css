@@ -1,0 +1,52 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+span {
+    text-align: center;
+    font-size: 2.5rem;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+svg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.error {
+    color: red;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+}
+
+.dir {
+    color: gray;
+    font-style: italic;
+}
+
+.files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    justify-content: center;
+}
+
+.file {
+    border: .25rem solid;
+    border-radius: .5rem;
+    padding: .5rem;
+}
