@@ -19,7 +19,9 @@ templ Index(path string, dir string) {
 			<span class="error">The page you were looking for wasn't found!</span>
 			<div class="main">
 				if path != "/" {
-					<a href={ templ.URL(filepath.Dir(path)) }>Go Back!</a>
+					<a href={ templ.URL(filepath.Dir(path)) }>
+						@components.BackArrow()
+					</a>
 				}
 				<span>Contents of: <span class="dir">{ dir }</span></span>
 			</div>

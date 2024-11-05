@@ -1,9 +1,6 @@
 package components
 
-import (
-	"github.com/lorypelli/server/templ/utils"
-	"path/filepath"
-)
+import "github.com/lorypelli/server/templ/utils"
 
 templ File(path string, dir string, f utils.File) {
 	<div class="file">
@@ -12,14 +9,8 @@ templ File(path string, dir string, f utils.File) {
 		} else {
 			@FileIcon()
 		}
-		if path == "/" {
-			<a href={ templ.URL(f.Name) }>
-				<span>{ f.Name }</span>
-			</a>
-		} else {
-			<a href={ templ.URL(filepath.Base(dir) + "/" + f.Name) }>
-				<span>{ f.Name }</span>
-			</a>
-		}
+		<a href={ utils.GetURL(path, dir, f) }>
+			<span>{ f.Name }</span>
+		</a>
 	</div>
 }
