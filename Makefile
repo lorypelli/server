@@ -6,8 +6,9 @@ linux:
 darwin:
 	@GOOS=darwin go build -o bin/server_$@ $(SRC)
 watch:
-	@templ fmt . && templ generate -watch
+	@go run github.com/a-h/templ/cmd/templ@latest fmt . && go run github.com/a-h/templ/cmd/templ@latest generate -watch
 act:
 	@act -s GITHUB_TOKEN="$(shell gh auth token)"
 run:
 	@go fmt all && go run $(SRC)
+all: win32 linux darwin

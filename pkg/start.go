@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/websocket/v2"
-	f "github.com/lorypelli/server/frontend"
+	"github.com/lorypelli/server/frontend"
 	"github.com/lorypelli/server/internal"
 	"github.com/pterm/pterm"
 )
@@ -84,7 +84,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 				return ctx.Next()
 			}
 		}
-		return internal.Render(ctx, f.Index(ctx.Path(), p))
+		return internal.Render(ctx, frontend.Index(ctx.Path(), p))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
 	if IP != LocalIP {
