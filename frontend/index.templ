@@ -2,6 +2,7 @@ package frontend
 
 import (
 	"github.com/lorypelli/server/frontend/components"
+	"github.com/lorypelli/server/frontend/styles"
 	"github.com/lorypelli/server/frontend/utils"
 	"path/filepath"
 )
@@ -13,7 +14,7 @@ templ Index(path string, dir string) {
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1"/>
 			<title>Not Found!</title>
-			@templ.Raw(utils.RenderCSS())
+			@templ.Raw(styles.RenderCSS())
 		</head>
 		<body>
 			<span class="error">The page you were looking for wasn't found!</span>
