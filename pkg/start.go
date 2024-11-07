@@ -64,6 +64,10 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 	})
 	app.Static("/", dir, fiber.Static{
 		Index: "index" + ext,
+		ModifyResponse: func(ctx *fiber.Ctx) error {
+			ctx.Response().Header.Del("Content-Type")
+			return nil
+		},
 	})
 	app.Use(func(ctx *fiber.Ctx) error {
 		path := strings.Split(ctx.Path(), "/")
