@@ -16,7 +16,7 @@ import (
 
 var IP = internal.GetLocalIP()
 
-var LocalIP = "127.0.0.1"
+const LocalIP = "127.0.0.1"
 
 func Start(dir, ext, name string, extension, network, realtime bool, port, ws_port uint16) {
 	app := fiber.New(fiber.Config{
@@ -91,13 +91,17 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		return internal.Render(ctx, frontend.Index(ctx.Path(), p))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
+	msg := pterm.Sprintf("Local: http://%s:%d", LocalIP, port)
 	if IP != LocalIP {
-		box.Printfln("Local: http://%s:%d\nNetwork: http://%s:%d", LocalIP, port, IP, port)
+		msg += "\n"
+		msg += pterm.Sprintf("Network: http://%s:%d", IP, port)
+	}
+	box.Println(msg)
+	if IP != LocalIP {
 		if err := app.Listen(pterm.Sprintf(":%d", port)); err != nil {
 			internal.Exit(err)
 		}
 	} else {
-		box.Printfln("Local: http://%s:%d", LocalIP, port)
 		if err := app.Listen(pterm.Sprintf("%s:%d", LocalIP, port)); err != nil {
 			internal.Exit(err)
 		}
