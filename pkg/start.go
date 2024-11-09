@@ -83,10 +83,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 			return ctx.Next()
 		}
 		if _, err := os.Stat(p); os.IsNotExist(err) {
-			p, err = filepath.Abs(".")
-			if err != nil {
-				return ctx.Next()
-			}
+			return ctx.Redirect("/")
 		}
 		return internal.Render(ctx, frontend.Index(ctx.Path(), p))
 	})
