@@ -4,6 +4,7 @@ go 1.23.2
 
 require (
 	github.com/a-h/templ v0.2.793
+	github.com/gabriel-vasile/mimetype v1.4.6
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/websocket/v2 v2.2.1
 	github.com/pterm/pterm v0.12.79
@@ -31,8 +32,8 @@ require (
 	github.com/valyala/fasthttp v1.57.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/net v0.30.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
-	golang.org/x/term v0.25.0 // indirect
-	golang.org/x/text v0.19.0 // indirect
+	golang.org/x/net v0.31.0 // indirect
+	golang.org/x/sys v0.27.0 // indirect
+	golang.org/x/term v0.26.0 // indirect
+	golang.org/x/text v0.20.0 // indirect
 )
