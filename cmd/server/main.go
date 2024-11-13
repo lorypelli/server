@@ -16,7 +16,7 @@ const (
 	DEFAULT_DIR                   = "."
 	DEFAULT_USE_EXT               = true
 	DEFAULT_USE_REALTIME          = false
-	DEFAULT_EXPOSE_NETWORK        = false
+	DEFAULT_EXPOSE_NETWORK        = true
 	DEFAULT_EXT                   = ".html"
 	DEFAULT_PORT                  = "53273"
 )
