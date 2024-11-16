@@ -10,7 +10,7 @@ import (
 
 func Monitor(path string, hasChanged chan bool) {
 	times := make(map[string]time.Time)
-	filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
+	filepath.WalkDir(path, func(path string, _ fs.DirEntry, _ error) error {
 		if strings.HasPrefix(path, ".") {
 			return nil
 		}
@@ -20,7 +20,7 @@ func Monitor(path string, hasChanged chan bool) {
 	})
 	for {
 		time.Sleep(time.Second)
-		filepath.WalkDir(path, func(path string, d fs.DirEntry, err error) error {
+		filepath.WalkDir(path, func(path string, _ fs.DirEntry, _ error) error {
 			if strings.HasPrefix(path, ".") {
 				return nil
 			}
