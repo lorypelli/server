@@ -9,6 +9,7 @@ import (
 )
 
 func Monitor(path string, hasChanged chan bool) {
+	defer close(hasChanged)
 	times := make(map[string]time.Time)
 	filepath.WalkDir(path, func(path string, _ fs.DirEntry, _ error) error {
 		if strings.HasPrefix(path, ".") {
