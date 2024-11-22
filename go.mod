@@ -4,7 +4,6 @@ go 1.23.2
 
 require (
 	github.com/a-h/templ v0.2.793
-	github.com/gabriel-vasile/mimetype v1.4.6
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/websocket/v2 v2.2.1
 	github.com/pterm/pterm v0.12.79

@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gabriel-vasile/mimetype"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/websocket/v2"
@@ -68,7 +67,6 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		ModifyResponse: func(ctx *fiber.Ctx) error {
 			ctx.Response().Header.Set("Content-Disposition", pterm.Sprintf("inline; filename=\"%s\"", filepath.Base(ctx.Path())))
 			ctx.Response().Header.Set("Content-Length", pterm.Sprint(len(ctx.Response().Body())))
-			ctx.Response().Header.Set("Content-Type", mimetype.Detect(ctx.Response().Body()).String())
 			return nil
 		},
 	})
