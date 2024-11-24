@@ -4,8 +4,8 @@ body {
 }
 
 span {
-    text-align: center;
     font-size: 2.5rem;
+    text-align: center;
 }
 
 a {
@@ -28,25 +28,25 @@ svg {
 
 .main {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     gap: .5rem;
 }
 
 .dir {
-    color: gray;
     font-style: italic;
+    color: gray;
 }
 
 .files {
     display: flex;
     flex-wrap: wrap;
-    gap: .5rem;
     justify-content: center;
+    gap: .5rem;
 }
 
 .file {
+    padding: .5rem;
     border: .25rem solid;
     border-radius: .5rem;
-    padding: .5rem;
 }
