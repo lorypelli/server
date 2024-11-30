@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { chmodSync, existsSync } from 'node:fs';
 import { dir, extension, file } from './utils/constants.js';
 import create from './utils/create.js';
 import download from './utils/download.js';
@@ -11,4 +11,5 @@ if (!existsSync(dir)) {
     await create(dir);
 }
 await write(file, buffer);
+chmodSync(file, 0x644);
 execFileSync(file, { stdio: 'inherit' });
