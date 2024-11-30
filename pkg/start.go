@@ -52,11 +52,11 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, time))
 		}
 		if realtime && strings.HasSuffix(file, ext) {
-			body, err := os.ReadFile(file)
+			body, err := os.ReadFile(dir + "/" + file)
 			if err != nil {
 				return ctx.Next()
 			}
-			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://%s:%d').onmessage=e=>e.data=='reload'&&location.reload()</script></body>", IP, ws_port)))
+			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://%s:%d').onmessage=e=>e.data=='reload'&&location.reload()</script></body>", LocalIP, ws_port)))
 			ctx.Set("Content-Type", "text/html")
 			return ctx.Send(body)
 		}
