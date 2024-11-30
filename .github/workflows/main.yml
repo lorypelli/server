@@ -12,12 +12,12 @@ jobs:
             - name: Checkout Repository
               uses: actions/checkout@master
               with:
-                ref: main
-                fetch-depth: 0
+                  ref: main
+                  fetch-depth: 0
             - name: Setup Go
               uses: actions/setup-go@master
               with:
-                go-version: '1.23.2'
+                  go-version: '1.23.2'
             - name: Generate Templ Code
               run: go run github.com/a-h/templ/cmd/templ@latest generate
             - name: Installing Packages
@@ -27,8 +27,8 @@ jobs:
             - name: Create Release
               uses: softprops/action-gh-release@master
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                name: Release
-                tag_name: release
-                files: bin/*
+                  name: Release
+                  tag_name: release
+                  files: bin/*
