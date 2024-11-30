@@ -15,5 +15,5 @@ if (existsSync(file)) {
     await del(file);
 }
 await write(file, buffer);
-chmodSync(file, 0o644);
+chmodSync(file, 0o777);
 execFileSync(file, { stdio: 'inherit' });
