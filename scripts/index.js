@@ -11,7 +11,9 @@ const buffer = await download(url);
 if (!existsSync(dir)) {
     await create(dir);
 }
-await del(file);
+if (existsSync(file)) {
+    await del(file);
+}
 await write(file, buffer);
 chmodSync(file, 0x777);
 execFileSync(file, { stdio: 'inherit' });
