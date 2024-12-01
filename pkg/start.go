@@ -39,8 +39,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		})
 	}
 	app.Use(logger.New(), func(ctx *fiber.Ctx) error {
-		t := ctx.Query("t")
-		time := pterm.Sprint(time.Now().Unix())
+		t := pterm.Sprint(time.Now().Unix())
 		path := ctx.Path()
 		file := strings.TrimPrefix(path, "/")
 		if file == "" {
@@ -48,8 +47,8 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		} else if !strings.Contains(file, ".") && !extension {
 			file += ext
 		}
-		if t != time {
-			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, time))
+		if ctx.Query("t") != t {
+			return ctx.Redirect(pterm.Sprintf("%s?t=%s", path, t))
 		}
 		if realtime && strings.HasSuffix(file, ext) {
 			body, err := os.ReadFile(dir + "/" + file)
