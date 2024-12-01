@@ -17,4 +17,4 @@ if (!existsSync(dir)) await create(dir);
 if (existsSync(file)) await del(file);
 await write(file, buffer);
 chmod(file, 0o777).catch((err) => error(err));
-execFileSync(file, argv.slice(3), { stdio: 'inherit' });
+execFileSync(file, argv.slice(2), { stdio: 'inherit' });
