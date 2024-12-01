@@ -1,6 +1,6 @@
 {
     "name": "fcy",
-    "version": "1.1.9",
+    "version": "1.1.10",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
     "scripts": {

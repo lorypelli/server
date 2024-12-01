@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { execFileSync } from 'node:child_process';
 import { chmodSync, existsSync } from 'node:fs';
 import { dir, extension, file } from './utils/constants.js';
