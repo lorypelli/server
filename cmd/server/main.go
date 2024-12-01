@@ -35,7 +35,7 @@ func main() {
 	var extension bool
 	var realtime bool
 	var network bool
-	if *dir == "" || *ext == "" || *port == "" {
+	if *dir == "" && *ext == "" && *port == "" {
 		defaults, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(true).Show("Do you want to use defaults options?")
 		if defaults {
 			*dir = DEFAULT_DIR
