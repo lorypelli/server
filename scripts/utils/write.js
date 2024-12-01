@@ -7,7 +7,5 @@ import { error } from './logs.js';
  */
 
 export default async function write(path, buffer) {
-    await writeFile(path, buffer).catch((err) => {
-        error(err);
-    });
+    await writeFile(path, buffer).catch((err) => error(err));
 }

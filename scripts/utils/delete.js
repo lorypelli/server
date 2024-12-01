@@ -6,7 +6,5 @@ import { error } from './logs.js';
  */
 
 export default async function del(path) {
-    await rm(path, { recursive: true }).catch((err) => {
-        error(err);
-    });
+    await rm(path, { recursive: true }).catch((err) => error(err));
 }

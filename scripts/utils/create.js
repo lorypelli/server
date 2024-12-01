@@ -6,7 +6,5 @@ import { error } from './logs.js';
  */
 
 export default async function create(path) {
-    await mkdir(path, { recursive: true }).catch((err) => {
-        error(err);
-    });
+    await mkdir(path, { recursive: true }).catch((err) => error(err));
 }

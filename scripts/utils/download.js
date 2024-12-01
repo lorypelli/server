@@ -7,8 +7,6 @@ import { error } from './logs.js';
 
 export default async function download(url) {
     const res = await fetch(url);
-    if (!res.ok) {
-        error(res.statusText);
-    }
+    if (!res.ok) error(res.statusText);
     return Buffer.from(await res.arrayBuffer());
 }

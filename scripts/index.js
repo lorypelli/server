@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 
 import { execFileSync } from 'node:child_process';
-import { chmodSync, existsSync } from 'node:fs';
-import { platform } from 'node:process';
+import { error } from 'node:console';
+import { existsSync } from 'node:fs';
+import { chmod } from 'node:fs/promises';
+import { argv, platform } from 'node:process';
 import { dir, extension, file } from './utils/constants.js';
 import create from './utils/create.js';
 import del from './utils/delete.js';
@@ -11,12 +13,8 @@ import write from './utils/write.js';
 
 const url = `https://github.com/lorypelli/server/releases/latest/download/server_${platform}${extension}`;
 const buffer = await download(url);
-if (!existsSync(dir)) {
-    await create(dir);
-}
-if (existsSync(file)) {
-    await del(file);
-}
+if (!existsSync(dir)) await create(dir);
+if (existsSync(file)) await del(file);
 await write(file, buffer);
-chmodSync(file, 0o777);
-execFileSync(file, { stdio: 'inherit' });
+chmod(file, 0o777).catch((err) => error(err));
+execFileSync(file, argv.slice(3), { stdio: 'inherit' });
