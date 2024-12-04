@@ -11,21 +11,12 @@ import (
 	"github.com/pterm/pterm"
 )
 
-const (
-	WS_PORT                uint16 = 50643
-	DEFAULT_DIR                   = "."
-	DEFAULT_USE_EXT               = true
-	DEFAULT_USE_REALTIME          = true
-	DEFAULT_EXPOSE_NETWORK        = true
-	DEFAULT_EXT                   = ".html"
-	DEFAULT_PORT                  = "53273"
-)
-
 func main() {
 	dir := flag.String("d", "", "Directory to serve")
 	ext := flag.String("e", "", "Extension to use")
 	name := flag.String("n", "", "App name")
 	port := flag.String("p", "", "Port to use")
+	skip := flag.Bool("y", false, "Skip questions")
 	flag.Parse()
 	*dir = strings.TrimSpace(*dir)
 	*ext = strings.TrimSpace(*ext)
@@ -35,41 +26,48 @@ func main() {
 	var extension bool
 	var realtime bool
 	var network bool
-	if *dir == "" && *ext == "" && *port == "" {
+	if *skip {
+		defaults = true
+	} else {
 		defaults, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(true).Show("Do you want to use defaults options?")
-		if defaults {
-			*dir = DEFAULT_DIR
-			extension = DEFAULT_USE_EXT
-			realtime = DEFAULT_USE_REALTIME
-			network = DEFAULT_EXPOSE_NETWORK
-			*ext = DEFAULT_EXT
-			*port = DEFAULT_PORT
-		}
 	}
-	if !defaults {
+	if defaults {
+		if *dir == "" {
+			*dir = internal.DEFAULT_DIR
+		}
+		if *ext == "" {
+			*ext = internal.DEFAULT_EXT
+		}
+		if *port == "" {
+			*port = internal.DEFAULT_PORT
+		}
+		extension = internal.DEFAULT_USE_EXT
+		realtime = internal.DEFAULT_USE_REALTIME
+		network = internal.DEFAULT_EXPOSE_NETWORK
+	} else if !defaults {
 		for *dir == "" {
-			*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(DEFAULT_DIR).Show("Provide directory to serve")
+			*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_DIR).Show("Provide directory to serve")
 			*dir = strings.TrimSpace(*dir)
 		}
 		if _, err := os.Stat(*dir); err != nil {
 			internal.Exit(err)
 		}
-		extension, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(DEFAULT_USE_EXT).Show("Do you want to use the HTML extension?")
-		realtime, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(DEFAULT_USE_REALTIME).Show("Do you want to have realtime loading for HTML files?")
+		extension, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(internal.DEFAULT_USE_EXT).Show("Do you want to use the HTML extension?")
+		realtime, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(internal.DEFAULT_USE_REALTIME).Show("Do you want to have realtime loading for HTML files?")
 		if realtime {
-			pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", WS_PORT)
+			pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", internal.WS_PORT)
 		}
-		network, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(DEFAULT_EXPOSE_NETWORK).Show("Do you want to expose also to the local network?")
+		network, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(internal.DEFAULT_EXPOSE_NETWORK).Show("Do you want to expose also to the local network?")
 		for *ext != ".html" && *ext != ".htm" {
-			*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm"}).WithDefaultOption(DEFAULT_EXT).Show("Choose HTML extension")
+			*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm"}).WithDefaultOption(internal.DEFAULT_EXT).Show("Choose HTML extension")
 			*ext = strings.TrimSpace(*ext)
 		}
 		if *name == "" {
 			*name, _ = pterm.DefaultInteractiveTextInput.Show("Provide app name")
 			*name = strings.TrimSpace(*name)
 		}
-		for *port == "" || (realtime && *port == pterm.Sprint(WS_PORT)) {
-			*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(DEFAULT_PORT).Show("Provide port to use")
+		for *port == "" {
+			*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_PORT).Show("Provide port to use")
 			*port = strings.TrimSpace(*port)
 		}
 	}
@@ -79,8 +77,8 @@ func main() {
 	}
 	go func() {
 		if realtime {
-			pkg.StartWebsocket(*dir, WS_PORT)
+			pkg.StartWebsocket(*dir, internal.WS_PORT)
 		}
 	}()
-	pkg.Start(*dir, *ext, *name, extension, network, realtime, uint16(p), WS_PORT)
+	pkg.Start(*dir, *ext, *name, extension, network, realtime, uint16(p), internal.WS_PORT)
 }
