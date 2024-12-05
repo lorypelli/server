@@ -9,6 +9,8 @@ watch:
 	@go run github.com/a-h/templ/cmd/templ@latest fmt . && go run github.com/a-h/templ/cmd/templ@latest generate -watch
 act:
 	@act -s GITHUB_TOKEN="$(shell gh auth token)"
+update:
+	@go get -u ./... && go mod tidy
 run:
-	@go fmt all && go run $(SRC)
+	@go fmt ./... && go run $(SRC)
 all: win32 linux darwin
