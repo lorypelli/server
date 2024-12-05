@@ -44,7 +44,7 @@ func main() {
 		extension = internal.DEFAULT_USE_EXT
 		realtime = internal.DEFAULT_USE_REALTIME
 		network = internal.DEFAULT_EXPOSE_NETWORK
-	} else if !defaults {
+	} else {
 		for *dir == "" {
 			*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_DIR).Show("Provide directory to serve")
 			*dir = strings.TrimSpace(*dir)
