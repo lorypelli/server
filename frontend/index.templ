@@ -18,14 +18,14 @@ templ Index(path string, dir string) {
 		</head>
 		<body>
 			<span class="error">The page you were looking for wasn't found!</span>
-			<div class="main">
+			<span>
 				if path != "/" {
 					<a href={ templ.URL(filepath.Dir(path)) }>
 						@components.BackArrow()
 					</a>
 				}
-				<span>Contents of: <span class="dir">{ dir }</span></span>
-			</div>
+				Contents of: <span class="dir">{ dir }</span>
+			</span>
 			<div class="files">
 				for _, file := range utils.GetFiles(dir) {
 					@components.File(path, dir, file)

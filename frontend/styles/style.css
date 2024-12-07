@@ -26,13 +26,6 @@ svg {
     color: red;
 }
 
-.main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: .5rem;
-}
-
 .dir {
     font-style: italic;
     color: gray;
