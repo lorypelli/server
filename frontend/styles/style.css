@@ -6,6 +6,7 @@ body {
 span {
     font-size: 2.5rem;
     text-align: center;
+    overflow-wrap: break-word;
 }
 
 a {
@@ -35,10 +36,14 @@ svg {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    padding-left: .5rem;
+    padding-right: .5rem;
+    overflow-wrap: break-word;
     gap: .5rem;
 }
 
 .file {
+    max-width: 100%;
     padding: .5rem;
     border: .25rem solid;
     border-radius: .5rem;

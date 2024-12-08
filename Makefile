@@ -11,6 +11,8 @@ act:
 	@act -s GITHUB_TOKEN="$(shell gh auth token)"
 update:
 	@go get -u ./... && go mod tidy
+format:
+	@go fmt ./...
 run:
-	@go fmt ./... && go run $(SRC)
+	@go run $(SRC)
 all: win32 linux darwin
