@@ -32,7 +32,7 @@ func Monitor(path string, hasChanged chan bool) {
 				hasChanged <- true
 			}
 			for path := range times {
-				if _, err := os.Stat(path); os.IsNotExist(err) {
+				if _, err := os.Stat(path); err != nil {
 					delete(times, path)
 					hasChanged <- true
 				}
