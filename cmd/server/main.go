@@ -35,6 +35,9 @@ func main() {
 		if *dir == "" {
 			*dir = internal.DEFAULT_DIR
 		}
+		if _, err := os.Stat(*dir); err != nil {
+			internal.Exit(err)
+		}
 		if *ext == "" {
 			*ext = internal.DEFAULT_EXT
 		}
@@ -58,9 +61,13 @@ func main() {
 			pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", internal.WS_PORT)
 		}
 		network, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(internal.DEFAULT_EXPOSE_NETWORK).Show("Do you want to expose also to the local network?")
-		for *ext != ".html" && *ext != ".htm" {
-			*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm"}).WithDefaultOption(internal.DEFAULT_EXT).Show("Choose HTML extension")
+		for *ext == "" {
+			*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm", "..."}).WithDefaultOption(internal.DEFAULT_EXT).Show("Choose HTML extension")
 			*ext = strings.TrimSpace(*ext)
+			if *ext == "..." {
+				*ext, _ = pterm.DefaultInteractiveTextInput.Show("Provide extension to use")
+				*ext = strings.TrimSpace(*ext)
+			}
 		}
 		if *name == "" {
 			*name, _ = pterm.DefaultInteractiveTextInput.Show("Provide app name")

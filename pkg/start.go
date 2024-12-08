@@ -44,7 +44,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		file := strings.TrimPrefix(path, "/")
 		if file == "" {
 			file += "index" + ext
-		} else if !strings.Contains(file, ".") && !extension {
+		} else if !extension && !strings.Contains(file, ".") {
 			file += ext
 		}
 		if ctx.Query("t") != t {
@@ -82,7 +82,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		if err != nil {
 			return ctx.Next()
 		}
-		if _, err := os.Stat(p); os.IsNotExist(err) && ctx.Path() != "/" {
+		if _, err := os.Stat(p); os.IsNotExist(err) {
 			return ctx.Redirect("/")
 		}
 		return internal.Render(ctx, frontend.Index(ctx.Path(), p))
