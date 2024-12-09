@@ -16,8 +16,6 @@ import (
 
 var IP = internal.GetLocalIP()
 
-const LocalIP = "127.0.0.1"
-
 func Start(dir, ext, name string, extension, network, realtime bool, port, ws_port uint16) {
 	app := fiber.New(fiber.Config{
 		AppName:               name,
@@ -25,7 +23,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		DisableStartupMessage: true,
 	})
 	if !network {
-		IP = LocalIP
+		IP = internal.LOCAL_IP
 	}
 	if !extension {
 		app.Use(func(ctx *fiber.Ctx) error {
@@ -55,7 +53,7 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 			if err != nil {
 				return ctx.Next()
 			}
-			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://%s:%d').onmessage=e=>e.data=='reload'&&location.reload()</script></body>", LocalIP, ws_port)))
+			body = []byte(strings.ReplaceAll(string(body), "</body>", pterm.Sprintf("<script>new WebSocket('ws://%s:%d').onmessage=e=>e.data=='reload'&&location.reload()</script></body>", strings.Split(ctx.Hostname(), ":")[0], ws_port)))
 			ctx.Set("Content-Type", "text/html")
 			return ctx.Send(body)
 		}
@@ -88,18 +86,18 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		return internal.Render(ctx, frontend.Index(ctx.Path(), p))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()
-	msg := pterm.Sprintf("Local: http://%s:%d", LocalIP, port)
-	if IP != LocalIP {
+	msg := pterm.Sprintf("Local: http://%s:%d", internal.LOCAL_IP, port)
+	if IP != internal.LOCAL_IP {
 		msg += "\n"
 		msg += pterm.Sprintf("Network: http://%s:%d", IP, port)
 	}
 	box.Println(msg)
-	if IP != LocalIP {
+	if IP != internal.LOCAL_IP {
 		if err := app.Listen(pterm.Sprintf(":%d", port)); err != nil {
 			internal.Exit(err)
 		}
 	} else {
-		if err := app.Listen(pterm.Sprintf("%s:%d", LocalIP, port)); err != nil {
+		if err := app.Listen(pterm.Sprintf("%s:%d", internal.LOCAL_IP, port)); err != nil {
 			internal.Exit(err)
 		}
 	}
@@ -117,12 +115,12 @@ func StartWebsocket(dir string, port uint16) {
 			ctx.WriteMessage(websocket.TextMessage, []byte("reload"))
 		}
 	}))
-	if IP != LocalIP {
+	if IP != internal.LOCAL_IP {
 		if err := app.Listen(pterm.Sprintf(":%d", port)); err != nil {
 			internal.Exit(err)
 		}
 	} else {
-		if err := app.Listen(pterm.Sprintf("%s:%d", LocalIP, port)); err != nil {
+		if err := app.Listen(pterm.Sprintf("%s:%d", internal.LOCAL_IP, port)); err != nil {
 			internal.Exit(err)
 		}
 	}
