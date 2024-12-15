@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import { log } from 'node:console';
 import { exit } from 'node:process';
 
 /**
@@ -6,6 +7,6 @@ import { exit } from 'node:process';
  */
 
 export function error(msg) {
-    console.log(chalk.bold.bgRed('  ERROR  '), chalk.bold.redBright(msg));
+    log(chalk.bold.bgRed('  ERROR  '), chalk.bold.redBright(msg));
     exit(1);
 }
