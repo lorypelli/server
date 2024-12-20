@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/websocket/v2"
 	"github.com/lorypelli/server/frontend"
 	"github.com/lorypelli/server/internal"
@@ -36,7 +35,8 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 			return ctx.Next()
 		})
 	}
-	app.Use(logger.New(), func(ctx *fiber.Ctx) error {
+	app.Use(internal.Logger())
+	app.Use(func(ctx *fiber.Ctx) error {
 		t := pterm.Sprint(time.Now().Unix())
 		path := ctx.Path()
 		file := strings.TrimPrefix(path, "/")
