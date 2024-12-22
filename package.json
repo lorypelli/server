@@ -1,12 +1,11 @@
 {
     "name": "fcy",
-    "version": "1.1.20",
+    "version": "1.2.0",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
     "scripts": {
         "dev": "node scripts/index.js",
-        "format": "prettier --write .",
-        "prepublish": "pnpm format && pnpm update --latest"
+        "format": "prettier --write ."
     },
     "files": [
         "./scripts/"
@@ -30,11 +29,12 @@
     "license": "MIT",
     "devDependencies": {
         "@types/node": "^22.10.2",
+        "husky": "^9.1.7",
         "prettier": "^3.4.2",
         "prettier-plugin-organize-imports": "^4.1.0"
     },
     "dependencies": {
-        "chalk": "^5.3.0",
+        "chalk": "^5.4.1",
         "execa": "^9.5.2"
     }
 }

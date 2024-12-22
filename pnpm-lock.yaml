@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       chalk:
-        specifier: ^5.3.0
-        version: 5.3.0
+        specifier: ^5.4.1
+        version: 5.4.1
       execa:
         specifier: ^9.5.2
         version: 9.5.2
@@ -18,6 +18,9 @@ importers:
       '@types/node':
         specifier: ^22.10.2
         version: 22.10.2
+      husky:
+        specifier: ^9.1.7
+        version: 9.1.7
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
@@ -37,8 +40,8 @@ packages:
   '@types/node@22.10.2':
     resolution: {integrity: sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==}
 
-  chalk@5.3.0:
-    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
+  chalk@5.4.1:
+    resolution: {integrity: sha512-zgVZuo2WcZgfUEmsn6eO3kINexW8RAE4maiQ8QNs8CtpPCSyMiYsULR3HQYkm3w8FIA3SberyMJMSldGsW+U3w==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
 
   cross-spawn@7.0.6:
@@ -60,6 +63,11 @@ packages:
   human-signals@8.0.0:
     resolution: {integrity: sha512-/1/GPCpDUCCYwlERiYjxoczfP0zfvZMU/OWgQPMya9AbAE24vseigFdhAMObpc8Q4lc/kjutPfUddDYyAmejnA==}
     engines: {node: '>=18.18.0'}
+
+  husky@9.1.7:
+    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   is-plain-obj@4.1.0:
     resolution: {integrity: sha512-+Pgi+vMuUNkJyExiMBt5IlFoMyKnr5zhJ4Uspz58WOhBF5QoIZkFyNHIbBAtHwzVAgk5RtndVNsDRN61/mmDqg==}
@@ -158,7 +166,7 @@ snapshots:
     dependencies:
       undici-types: 6.20.0
 
-  chalk@5.3.0: {}
+  chalk@5.4.1: {}
 
   cross-spawn@7.0.6:
     dependencies:
@@ -191,6 +199,8 @@ snapshots:
       is-stream: 4.0.1
 
   human-signals@8.0.0: {}
+
+  husky@9.1.7: {}
 
   is-plain-obj@4.1.0: {}
 

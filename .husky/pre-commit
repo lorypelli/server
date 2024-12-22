@@ -1,0 +1,17 @@
+#!/bin/bash
+
+export NODE_OPTIONS="--no-warnings"
+
+if command -v pnpm &>/dev/null; then
+    pnpm format
+else
+    npm run format
+fi
+
+if command -v make &>/dev/null; then
+    make format
+fi
+
+if command -v git &>/dev/null; then
+    git add .
+fi

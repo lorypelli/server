@@ -1,4 +1,5 @@
 SRC := cmd/server/main.go
+TEMPL := github.com/a-h/templ/cmd/templ@latest
 win32:
 	@GOOS=windows go build -o bin/server_$@.exe $(SRC)
 linux:
@@ -6,7 +7,7 @@ linux:
 darwin:
 	@GOOS=darwin go build -o bin/server_$@ $(SRC)
 watch:
-	@go run github.com/a-h/templ/cmd/templ@latest fmt . && go run github.com/a-h/templ/cmd/templ@latest generate -watch
+	@go run $(TEMPL) fmt . && $(TEMPL) generate -watch
 act:
 	@act -s GITHUB_TOKEN="$(shell gh auth token)"
 update:

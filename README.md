@@ -1,3 +1,21 @@
+### Package Manager
+
+```sh
+npx fcy
+```
+
+```sh
+yarn dlx fcy
+```
+
+```sh
+pnpx fcy
+```
+
+```sh
+bunx fcy
+```
+
 ### For Windows
 
 ```sh

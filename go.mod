@@ -6,8 +6,8 @@ require (
 	github.com/a-h/templ v0.2.793
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/gofiber/websocket/v2 v2.2.1
-	github.com/pterm/pterm v0.12.79
-	github.com/tdewolff/minify/v2 v2.21.1
+	github.com/pterm/pterm v0.12.80
+	github.com/tdewolff/minify/v2 v2.21.2
 )
 
 require (
@@ -16,7 +16,7 @@ require (
 	atomicgo.dev/schedule v0.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/containerd/console v1.0.4 // indirect
-	github.com/fasthttp/websocket v1.5.10 // indirect
+	github.com/fasthttp/websocket v1.5.11 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect
@@ -28,11 +28,13 @@ require (
 	github.com/savsgio/gotils v0.0.0-20240704082632-aef3928b8a38 // indirect
 	github.com/tdewolff/parse/v2 v2.7.19 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.57.0 // indirect
+	github.com/valyala/fasthttp v1.58.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
-	golang.org/x/net v0.31.0 // indirect
-	golang.org/x/sys v0.27.0 // indirect
-	golang.org/x/term v0.26.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
+	golang.org/x/sys v0.28.0 // indirect
+	golang.org/x/term v0.27.0 // indirect
+	golang.org/x/text v0.21.0 // indirect
 )
+
+replace github.com/pterm/pterm => github.com/pterm/pterm v0.12.79
