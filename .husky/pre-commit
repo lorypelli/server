@@ -2,16 +2,13 @@
 
 export NODE_OPTIONS="--no-warnings"
 
-if command -v pnpm &>/dev/null; then
-    pnpm format
+if command -v bunx &>/dev/null; then
+    bunx lint-staged
+elif command -v pnpx &>/dev/null; then
+    pnpx lint-staged
+elif command -v npx &>/dev/null; then
+    npx lint-staged
 else
-    npm run format
-fi
-
-if command -v make &>/dev/null; then
-    make format
-fi
-
-if command -v git &>/dev/null; then
-    git add .
+    echo "THERE WAS AN ERROR!"
+    exit 1
 fi
