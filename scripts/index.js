@@ -10,7 +10,7 @@ import { dir, extension, file } from './utils/constants.js';
 import create from './utils/create.js';
 import del from './utils/delete.js';
 import download from './utils/download.js';
-import json from './utils/json.cjs';
+import json from './utils/json.js';
 import { error } from './utils/logs.js';
 import write from './utils/write.js';
 
