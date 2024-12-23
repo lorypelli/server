@@ -1,3 +1,4 @@
+import { fetch } from 'node-fetch-native';
 import { Buffer } from 'node:buffer';
 import { error } from './logs.js';
 

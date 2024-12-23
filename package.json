@@ -1,6 +1,6 @@
 {
     "name": "fcy",
-    "version": "1.2.1",
+    "version": "1.2.2",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
     "scripts": {
@@ -35,6 +35,7 @@
     },
     "dependencies": {
         "chalk": "^5.4.1",
-        "execa": "^9.5.2"
+        "execa": "^9.5.2",
+        "node-fetch-native": "^1.6.4"
     }
 }
