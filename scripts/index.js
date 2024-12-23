@@ -14,14 +14,16 @@ import json from './utils/json.js';
 import { error } from './utils/logs.js';
 import write from './utils/write.js';
 
-log(
-    chalk.bold.bgBlue('  INFO  '),
-    chalk.bold.blueBright(`Welcome to fcy@${json.version}!`),
-);
-const url = `https://github.com/lorypelli/server/releases/latest/download/server_${platform}${extension}`;
-const buffer = await download(url);
-if (!existsSync(dir)) await create(dir);
-if (existsSync(file)) await del(file);
-await write(file, buffer);
-chmod(file, 0o777).catch((err) => error(err));
-execa(file, argv.slice(2), { stdio: 'inherit' }).catch((err) => error(err));
+(async () => {
+    log(
+        chalk.bold.bgBlue('  INFO  '),
+        chalk.bold.blueBright(`Welcome to fcy@${json.version}!`),
+    );
+    const url = `https://github.com/lorypelli/server/releases/latest/download/server_${platform}${extension}`;
+    const buffer = await download(url);
+    if (!existsSync(dir)) await create(dir);
+    if (existsSync(file)) await del(file);
+    await write(file, buffer);
+    chmod(file, 0o777).catch((err) => error(err));
+    execa(file, argv.slice(2), { stdio: 'inherit' }).catch((err) => error(err));
+})();
