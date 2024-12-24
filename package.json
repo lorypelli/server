@@ -1,6 +1,6 @@
 {
     "name": "fcy",
-    "version": "1.2.3",
+    "version": "2.0.0",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
     "scripts": {
@@ -27,6 +27,9 @@
     ],
     "author": "LoryPelli",
     "license": "MIT",
+    "engines": {
+        "node": ">=14.13.1"
+    },
     "devDependencies": {
         "@types/node": "^22.10.2",
         "husky": "^9.1.7",

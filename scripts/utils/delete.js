@@ -1,4 +1,4 @@
-import { rm } from 'node:fs/promises';
+import { unlink } from 'node:fs/promises';
 import { error } from './logs.js';
 
 /**
@@ -6,5 +6,5 @@ import { error } from './logs.js';
  */
 
 export default async function del(path) {
-    await rm(path, { recursive: true }).catch((err) => error(err));
+    await unlink(path, { recursive: true }).catch((err) => error(err));
 }
