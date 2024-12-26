@@ -23,7 +23,7 @@ svg {
     height: 1.5rem;
 }
 
-.error {
+.error, .no_files_error {
     color: red;
 }
 
@@ -39,6 +39,19 @@ svg {
     padding: 0 .5rem;
     overflow-wrap: break-word;
     gap: .5rem;
+}
+
+.no_files {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 110px);
+}
+
+.no_files_error {
+    font-size: 5rem;
+    font-style: italic;
+    font-weight: bold;
 }
 
 .file {

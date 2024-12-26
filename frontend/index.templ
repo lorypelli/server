@@ -26,11 +26,18 @@ templ Index(path string, dir string) {
 				}
 				Contents of: <span class="dir">{ dir }</span>
 			</span>
-			<div class="files">
-				for _, file := range utils.GetFiles(dir) {
-					@components.File(path, dir, file)
-				}
-			</div>
+			{{ files := utils.GetFiles(dir) }}
+			if len(files) == 0 {
+				<div class="no_files">
+					<span class="no_files_error">NO FILES!</span>
+				</div>
+			} else {
+				<div class="files">
+					for _, file := range files {
+						@components.File(path, dir, file)
+					}
+				</div>
+			}
 		</body>
 	</html>
 }

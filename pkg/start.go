@@ -71,17 +71,14 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		path := strings.Split(ctx.Path(), "/")
 		p, err := filepath.Abs(dir)
 		if err != nil {
-			return ctx.Redirect("/")
+			return ctx.Next()
 		}
 		if len(path) >= 2 {
 			p += "/" + strings.Join(path[1:], "/")
 		}
 		p, err = filepath.Abs(p)
 		if err != nil {
-			return ctx.Redirect("/")
-		}
-		if _, err := os.Stat(p); err != nil {
-			return ctx.Redirect("/")
+			return ctx.Next()
 		}
 		return internal.Render(ctx, frontend.Index(ctx.Path(), p))
 	})
