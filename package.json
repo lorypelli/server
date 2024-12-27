@@ -1,17 +1,18 @@
 {
     "name": "fcy",
-    "version": "2.0.3",
+    "version": "2.1.0",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
     "scripts": {
-        "dev": "node scripts/index.js",
+        "build": "tsup",
+        "dev": "node dist/index.js",
         "format": "prettier --write ."
     },
     "files": [
-        "./scripts/"
+        "./dist/"
     ],
     "bin": {
-        "fcy": "./scripts/index.js"
+        "fcy": "./dist/index.js"
     },
     "keywords": [
         "server",
@@ -34,7 +35,8 @@
         "@types/node": "^22.10.2",
         "husky": "^9.1.7",
         "prettier": "^3.4.2",
-        "prettier-plugin-organize-imports": "^4.1.0"
+        "prettier-plugin-organize-imports": "^4.1.0",
+        "tsup": "^8.3.5"
     },
     "dependencies": {
         "chalk": "^5.4.1",

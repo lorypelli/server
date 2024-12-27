@@ -1,10 +1,6 @@
 import { mkdir } from 'node:fs/promises';
-import { error } from './logs.js';
+import { error } from './logs.ts';
 
-/**
- * @param { string } path
- */
-
-export default async function create(path) {
+export default async function create(path: string) {
     await mkdir(path, { recursive: true }).catch((err) => error(err));
 }
