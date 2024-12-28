@@ -1,9 +1,8 @@
 import { createRequire } from 'node:module';
 
-const require = createRequire(import.meta.url);
+const url = import.meta.url;
+const require = createRequire(url);
 
 export default require(
-    import.meta.filename.endsWith('.ts')
-        ? '../../package.json'
-        : '../package.json',
+    url.endsWith('.ts') ? '../../package.json' : '../package.json',
 );
