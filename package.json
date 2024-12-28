@@ -1,13 +1,13 @@
 {
     "name": "fcy",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
     "scripts": {
         "build": "tsup",
         "dev": "node dist/index.js",
         "format": "prettier --write .",
-        "prepublish": "pnpm build"
+        "prepublishOnly": "pnpm build"
     },
     "files": [
         "./dist/"
