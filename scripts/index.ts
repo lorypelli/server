@@ -16,11 +16,9 @@ import set from './utils/permissions.ts';
 import write from './utils/write.ts';
 
 (async () => {
-    const exec = promisify(execFileSync) as (
-        file: string,
-        args: string[],
-        options: ExecFileSyncOptions,
-    ) => Promise<unknown>;
+    const exec = promisify<string, string[], ExecFileSyncOptions, void>(
+        execFileSync,
+    );
     log(
         chalk.bold.bgBlue('  INFO  '),
         chalk.bold.blueBright(`Welcome to fcy@${json.version}!`),
