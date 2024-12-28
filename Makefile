@@ -15,5 +15,7 @@ update:
 format:
 	@go fmt ./...
 run:
-	@go run $(SRC)
+	@go run $(SRC) $(filter-out $@,$(MAKECMDGOALS))
 all: win32 linux darwin
+%:
+	@:
