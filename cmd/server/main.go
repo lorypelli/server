@@ -12,10 +12,10 @@ import (
 )
 
 func main() {
-	dir := flag.String("d", "", "Directory to serve")
-	ext := flag.String("e", "", "Extension to use")
+	dir := flag.String("d", internal.DEFAULT_DIR, "Directory to serve")
+	ext := flag.String("e", internal.DEFAULT_EXT, "Extension to use")
 	name := flag.String("n", "", "App name")
-	port := flag.String("p", "", "Port to use")
+	port := flag.String("p", internal.DEFAULT_PORT, "Port to use")
 	skip := flag.Bool("y", false, "Skip questions")
 	flag.Parse()
 	*dir = strings.TrimSpace(*dir)
@@ -32,22 +32,16 @@ func main() {
 		defaults, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(true).Show("Do you want to use defaults options?")
 	}
 	if defaults {
-		if *dir == "" {
-			*dir = internal.DEFAULT_DIR
-		}
 		if _, err := os.Stat(*dir); err != nil {
 			internal.Exit(err)
-		}
-		if *ext == "" {
-			*ext = internal.DEFAULT_EXT
-		}
-		if *port == "" {
-			*port = internal.DEFAULT_PORT
 		}
 		extension = internal.DEFAULT_USE_EXT
 		realtime = internal.DEFAULT_USE_REALTIME
 		network = internal.DEFAULT_EXPOSE_NETWORK
 	} else {
+		*dir = ""
+		*ext = ""
+		*port = ""
 		for *dir == "" {
 			*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_DIR).Show("Provide directory to serve")
 			*dir = strings.TrimSpace(*dir)
