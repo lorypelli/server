@@ -22,6 +22,9 @@ func main() {
 	*ext = strings.TrimSpace(*ext)
 	*name = strings.TrimSpace(*name)
 	*port = strings.TrimSpace(*port)
+	var hasDir bool
+	var hasExt bool
+	var hasPort bool
 	var defaults bool
 	var extension bool
 	var realtime bool
@@ -39,9 +42,34 @@ func main() {
 		realtime = internal.DEFAULT_USE_REALTIME
 		network = internal.DEFAULT_EXPOSE_NETWORK
 	} else {
-		*dir = ""
-		*ext = ""
-		*port = ""
+		flag.Visit(func(f *flag.Flag) {
+			switch f.Name {
+			case "d":
+				{
+					hasDir = true
+					break
+				}
+			case "e":
+				{
+					hasExt = true
+					break
+				}
+			case "p":
+				{
+					hasPort = true
+					break
+				}
+			}
+		})
+		if !hasDir {
+			*dir = ""
+		}
+		if !hasExt {
+			*ext = ""
+		}
+		if !hasPort {
+			*port = ""
+		}
 		for *dir == "" {
 			*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_DIR).Show("Provide directory to serve")
 			*dir = strings.TrimSpace(*dir)
