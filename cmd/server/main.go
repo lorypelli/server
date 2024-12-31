@@ -12,11 +12,17 @@ import (
 )
 
 func main() {
-	dir := flag.String("d", internal.DEFAULT_DIR, "Directory to serve")
-	ext := flag.String("e", internal.DEFAULT_EXT, "Extension to use")
-	name := flag.String("n", "", "App name")
-	port := flag.String("p", internal.DEFAULT_PORT, "Port to use")
-	skip := flag.Bool("y", false, "Skip questions")
+	dir := flag.String("dir", internal.DEFAULT_DIR, "Directory to serve")
+	flag.StringVar(dir, "d", *dir, "Alias for --dir (-d)")
+	ext := flag.String("ext", internal.DEFAULT_EXT, "Extension to use")
+	flag.StringVar(ext, "e", *ext, "Alias for --ext (-e)")
+	name := flag.String("name", "", "App name")
+	flag.StringVar(name, "n", *name, "Alias for --name (-n)")
+	port := flag.String("port", internal.DEFAULT_PORT, "Port to use")
+	flag.StringVar(port, "p", *port, "Alias for --port (-p)")
+	skip := flag.Bool("yes", false, "Skip questions")
+	flag.BoolVar(skip, "y", *skip, "Alias for --yes (-y)")
+	flag.CommandLine.Usage = pkg.Help
 	flag.Parse()
 	*dir = strings.TrimSpace(*dir)
 	*ext = strings.TrimSpace(*ext)
