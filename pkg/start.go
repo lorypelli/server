@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
@@ -77,6 +78,10 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 			p += "/" + strings.Join(path[1:], "/")
 		}
 		p, err = filepath.Abs(p)
+		if err != nil {
+			return ctx.Next()
+		}
+		p, err = url.QueryUnescape(p)
 		if err != nil {
 			return ctx.Next()
 		}
