@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     display: flex;
     flex-direction: column;
@@ -36,7 +42,7 @@ svg {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 0 .5rem;
+    padding: .5rem;
     overflow-wrap: break-word;
     gap: .5rem;
 }

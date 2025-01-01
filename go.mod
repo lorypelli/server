@@ -4,7 +4,7 @@ go 1.23.4
 
 require (
 	github.com/a-h/templ v0.2.793
-	github.com/gofiber/fiber/v2 v2.52.5
+	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/gofiber/websocket/v2 v2.2.1
 	github.com/pterm/pterm v0.12.80
 	github.com/tdewolff/minify/v2 v2.21.2

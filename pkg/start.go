@@ -85,6 +85,9 @@ func Start(dir, ext, name string, extension, network, realtime bool, port, ws_po
 		if err != nil {
 			return ctx.Next()
 		}
+		if _, err := os.Stat(p); err != nil {
+			return internal.Render(ctx, frontend.Error(ctx.Path()))
+		}
 		return internal.Render(ctx, frontend.Index(ctx.Path(), p))
 	})
 	box := pterm.DefaultBox.WithTitle(name).WithTitleTopCenter()

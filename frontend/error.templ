@@ -1,0 +1,26 @@
+package frontend
+
+import (
+	"github.com/lorypelli/server/frontend/components"
+	"github.com/lorypelli/server/frontend/styles"
+	"path/filepath"
+)
+
+templ Error(path string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>Error!</title>
+			@templ.Raw(styles.RenderCSS("error"))
+		</head>
+		<body>
+			<span class="error">There was an error!</span>
+			<a class="back" href={ templ.URL(filepath.Dir(path)) }>
+				@components.BackArrow()
+				<span>Go Back!</span>
+			</a>
+		</body>
+	</html>
+}
