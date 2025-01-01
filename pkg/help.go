@@ -15,7 +15,7 @@ func Help() {
 		initial := f.DefValue
 		if initial != "" {
 			msg += " "
-			msg += pterm.Sprintf("(default: %s)", initial)
+			msg += pterm.Sprintf("(default: %q)", initial)
 		}
 		msg += "\n"
 	})
