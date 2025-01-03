@@ -1,6 +1,5 @@
 FROM golang:alpine
-WORKDIR /app
-COPY . /app
+COPY . .
 EXPOSE 53273
 RUN apk add --no-cache make
 RUN make linux
