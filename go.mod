@@ -3,7 +3,7 @@ module github.com/lorypelli/server
 go 1.23.4
 
 require (
-	github.com/a-h/templ v0.2.793
+	github.com/a-h/templ v0.3.819
 	github.com/gofiber/fiber/v2 v2.52.6
 	github.com/gofiber/websocket/v2 v2.2.1
 	github.com/pterm/pterm v0.12.80
@@ -16,7 +16,7 @@ require (
 	atomicgo.dev/schedule v0.1.0 // indirect
 	github.com/andybalholm/brotli v1.1.1 // indirect
 	github.com/containerd/console v1.0.4 // indirect
-	github.com/fasthttp/websocket v1.5.11 // indirect
+	github.com/fasthttp/websocket v1.5.12 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gookit/color v1.5.4 // indirect
 	github.com/klauspost/compress v1.17.11 // indirect

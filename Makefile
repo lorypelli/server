@@ -7,7 +7,7 @@ linux:
 darwin:
 	@GOOS=darwin go build -o bin/server_$@ $(SRC)
 watch:
-	@go run $(TEMPL) fmt . && go run $(TEMPL) generate -watch
+	@go run $(TEMPL) fmt . && go run $(TEMPL) generate --watch
 act:
 	@act -s GITHUB_TOKEN="$(shell gh auth token)"
 update:
