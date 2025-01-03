@@ -1,6 +1,5 @@
 SRC := cmd/server/main.go
 TEMPL := github.com/a-h/templ/cmd/templ@latest
-ARGS := $(filter-out $@,$(MAKECMDGOALS))
 win32:
 	@GOOS=windows go build -o bin/server_$@.exe $(SRC)
 linux:
