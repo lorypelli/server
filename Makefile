@@ -1,5 +1,6 @@
 SRC := cmd/server/main.go
 TEMPL := github.com/a-h/templ/cmd/templ@latest
+ARGS := $(filter-out $@,$(MAKECMDGOALS))
 win32:
 	@GOOS=windows go build -o bin/server_$@.exe $(SRC)
 linux:
@@ -16,6 +17,8 @@ format:
 	@go fmt ./...
 run:
 	@go run $(SRC) $(filter-out $@,$(MAKECMDGOALS))
+docker:
+	@docker build . -t server
 all: win32 linux darwin
 %:
 	@:
