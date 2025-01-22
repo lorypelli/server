@@ -20,6 +20,10 @@ func main() {
 	flag.StringVar(name, "n", *name, "Alias for --name (-n)")
 	port := flag.String("port", internal.DEFAULT_PORT, "Port to use")
 	flag.StringVar(port, "p", *port, "Alias for --port (-p)")
+	username := flag.String("username", "", "Username for authentication")
+	flag.StringVar(username, "user", *username, "Alias for --username (-user)")
+	password := flag.String("password", "", "Password for authentication")
+	flag.StringVar(password, "pwd", *password, "Alias for --password (-pwd)")
 	skip := flag.Bool("yes", false, "Skip questions")
 	flag.BoolVar(skip, "y", *skip, "Alias for --yes (-y)")
 	flag.CommandLine.Usage = pkg.Help
@@ -28,6 +32,8 @@ func main() {
 	*ext = strings.TrimSpace(*ext)
 	*name = strings.TrimSpace(*name)
 	*port = strings.TrimSpace(*port)
+	*username = strings.TrimSpace(*username)
+	*password = strings.TrimSpace(*password)
 	var hasDir bool
 	var hasExt bool
 	var hasPort bool
@@ -105,6 +111,14 @@ func main() {
 			*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_PORT).Show("Provide port to use")
 			*port = strings.TrimSpace(*port)
 		}
+		if *username == "" {
+			*username, _ = pterm.DefaultInteractiveTextInput.Show("Provide username for authentication")
+			*username = strings.TrimSpace(*username)
+		}
+		if *password == "" {
+			*password, _ = pterm.DefaultInteractiveTextInput.Show("Provide password for authentication")
+			*password = strings.TrimSpace(*password)
+		}
 	}
 	p, err := strconv.Atoi(*port)
 	if err != nil {
@@ -115,5 +129,5 @@ func main() {
 			pkg.StartWebsocket(*dir, internal.WS_PORT)
 		}
 	}()
-	pkg.Start(*dir, *ext, *name, extension, network, realtime, uint16(p), internal.WS_PORT)
+	pkg.Start(*dir, *ext, *name, *username, *password, extension, network, realtime, uint16(p))
 }
