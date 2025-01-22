@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/basicauth"
 	"github.com/gofiber/websocket/v2"
 	"github.com/lorypelli/server/internal"
 	"github.com/pterm/pterm"
@@ -21,13 +22,20 @@ func Start(dir, ext, name, username, password string, extension, network, realti
 	if !network {
 		IP = internal.LOCAL_IP
 	}
+	if username != "" && password != "" {
+		app.Use(basicauth.New(basicauth.Config{
+			Users: map[string]string{
+				username: password,
+			},
+		}))
+	}
 	app.Use(internal.Logger())
 	app.Use(internal.Time(dir, ext, extension, realtime))
 	app.Static("/", dir, fiber.Static{
 		Index: "index" + ext,
 		ModifyResponse: func(ctx *fiber.Ctx) error {
-			ctx.Response().Header.Set("Content-Disposition", pterm.Sprintf("inline; filename=%q", filepath.Base(ctx.Path())))
-			ctx.Response().Header.Set("Content-Length", pterm.Sprint(len(ctx.Response().Body())))
+			ctx.Set("Content-Disposition", pterm.Sprintf("inline; filename=%q", filepath.Base(ctx.Path())))
+			ctx.Set("Content-Length", pterm.Sprint(len(ctx.Response().Body())))
 			return nil
 		},
 	})
