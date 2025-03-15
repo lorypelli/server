@@ -1,6 +1,6 @@
 {
     "name": "fcy",
-    "version": "2.1.10",
+    "version": "2.1.11",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
     "scripts": {
@@ -33,11 +33,11 @@
         "node": ">=14.13.1"
     },
     "devDependencies": {
-        "@types/node": "^22.13.4",
+        "@types/node": "^22.13.10",
         "husky": "^9.1.7",
-        "prettier": "^3.5.1",
+        "prettier": "^3.5.3",
         "prettier-plugin-organize-imports": "^4.1.0",
-        "tsup": "^8.3.6"
+        "tsup": "^8.4.0"
     },
     "dependencies": {
         "chalk": "^5.4.1",

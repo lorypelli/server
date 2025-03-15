@@ -29,6 +29,7 @@ func Path(dir string) fiber.Handler {
 			return ctx.Next()
 		}
 		if _, err := os.Stat(p); err != nil {
+			ctx.Status(404)
 			return Render(ctx, frontend.Error(ctx.Path()))
 		}
 		return Render(ctx, frontend.Index(ctx.Path(), p))
