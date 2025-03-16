@@ -57,16 +57,19 @@ func main() {
 		flag.Visit(func(f *flag.Flag) {
 			switch f.Name {
 			case "d":
+			case "dir":
 				{
 					hasDir = true
 					break
 				}
 			case "e":
+			case "ext":
 				{
 					hasExt = true
 					break
 				}
 			case "p":
+			case "port":
 				{
 					hasPort = true
 					break
