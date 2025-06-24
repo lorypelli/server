@@ -29,7 +29,8 @@ svg {
     height: 1.5rem;
 }
 
-.error, .no_files_error {
+.error,
+.no_files_error {
     color: red;
 }
 
@@ -42,9 +43,9 @@ svg {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: .5rem;
+    padding: 0.5rem;
     overflow-wrap: break-word;
-    gap: .5rem;
+    gap: 0.5rem;
 }
 
 .no_files {
@@ -62,7 +63,7 @@ svg {
 
 .file {
     max-width: 100%;
-    padding: .5rem;
-    border: .25rem solid;
-    border-radius: .5rem;
+    padding: 0.5rem;
+    border: 0.25rem solid;
+    border-radius: 0.5rem;
 }
