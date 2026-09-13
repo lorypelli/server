@@ -1,12 +1,12 @@
 package internal
 
 const (
-	WS_PORT                uint16 = 50643
-	DEFAULT_DIR                   = "."
-	DEFAULT_USE_EXT               = true
-	DEFAULT_USE_REALTIME          = true
-	DEFAULT_EXPOSE_NETWORK        = true
-	DEFAULT_EXT                   = ".html"
-	DEFAULT_PORT                  = "53273"
-	LOCAL_IP                      = "127.0.0.1"
+	WSPort               = 50643
+	LocalIP              = "127.0.0.1"
+	DefaultDir           = "."
+	DefaultExt           = ".html"
+	DefaultPort          = "53273"
+	DefaultUseExt        = true
+	DefaultUseRealtime   = true
+	DefaultExposeNetwork = true
 )

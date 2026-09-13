@@ -1,0 +1,20 @@
+package frontend
+
+import "github.com/lorypelli/server/frontend/styles"
+
+templ Layout(title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>{ title }</title>
+			@templ.Raw(styles.CSS)
+		</head>
+		<body>
+			<main>
+				{ children... }
+			</main>
+		</body>
+	</html>
+}

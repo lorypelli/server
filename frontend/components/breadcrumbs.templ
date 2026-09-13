@@ -1,0 +1,15 @@
+package components
+
+import "github.com/lorypelli/server/frontend/utils"
+
+templ Breadcrumbs(route string) {
+	<nav class="breadcrumbs">
+		<a href="/">
+			@HomeIcon()
+		</a>
+		for _, crumb := range utils.Crumbs(route) {
+			<span class="separator">/</span>
+			<a href={ crumb.Href }>{ crumb.Name }</a>
+		}
+	</nav>
+}

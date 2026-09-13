@@ -2,23 +2,20 @@ package pkg
 
 import (
 	"flag"
+	"fmt"
 	"strings"
 
 	"github.com/pterm/pterm"
 )
 
 func Help() {
-	box := pterm.DefaultBox.WithTitle("Help Menu").WithTitleTopCenter()
-	var msg string
+	var b strings.Builder
 	flag.VisitAll(func(f *flag.Flag) {
-		msg += pterm.Sprintf("%s - %s", f.Name, f.Usage)
-		initial := f.DefValue
-		if initial != "" {
-			msg += " "
-			msg += pterm.Sprintf("(default: %q)", initial)
+		fmt.Fprintf(&b, "%s - %s", f.Name, f.Usage)
+		if f.DefValue != "" {
+			fmt.Fprintf(&b, " (default: %q)", f.DefValue)
 		}
-		msg += "\n"
+		b.WriteByte('\n')
 	})
-	msg = strings.TrimSuffix(msg, "\n")
-	box.Println(msg)
+	pterm.DefaultBox.WithTitle("Help Menu").WithTitleTopCenter().Println(strings.TrimSuffix(b.String(), "\n"))
 }

@@ -1,0 +1,32 @@
+package components
+
+import (
+	"fmt"
+	"github.com/lorypelli/server/frontend/utils"
+	"io/fs"
+)
+
+templ Entry(route string, entry fs.DirEntry) {
+	<li>
+		if entry.IsDir() {
+			<a class="entry folder" href={ utils.Folder(route, entry.Name()) }>
+				@FolderIcon()
+				<span>{ fmt.Sprintf("%s/", entry.Name()) }</span>
+			</a>
+		} else {
+			<a class="entry" href={ utils.File(route, entry.Name()) }>
+				@FileIcon()
+				<span>{ entry.Name() }</span>
+			</a>
+		}
+	</li>
+}
+
+templ ParentEntry(route string) {
+	<li>
+		<a class="entry parent" href={ utils.Parent(route) }>
+			@ArrowLeftIcon()
+			<span>Parent directory</span>
+		</a>
+	</li>
+}

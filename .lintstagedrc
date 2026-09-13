@@ -1,4 +1,0 @@
-{
-    "!(*.go)": "pnpm format",
-    "*.go": "make format"
-}

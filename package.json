@@ -1,20 +1,26 @@
 {
     "name": "fcy",
-    "version": "2.1.13",
+    "version": "3.0.0",
     "description": "A fast webserver using golang and fiber",
     "type": "module",
+    "engines": {
+        "node": "^22.15.0 || >=24.0.0"
+    },
+    "bin": {
+        "fcy": "./dist/index.mjs"
+    },
     "scripts": {
-        "build": "tsup",
-        "dev": "node dist/index.js",
-        "format": "prettier --write .",
+        "build": "tsdown",
+        "dev": "make generate && go run ./cmd/server",
+        "format": "pnpm \"/format:.*/\"",
+        "format:prettier": "prettier --write .",
+        "format:go": "go fmt ./...",
+        "format:templ": "go tool templ fmt .",
         "prepublishOnly": "pnpm build"
     },
     "files": [
-        "./dist/"
+        "./dist"
     ],
-    "bin": {
-        "fcy": "./dist/index.js"
-    },
     "keywords": [
         "server",
         "serve",
@@ -29,18 +35,13 @@
     ],
     "author": "LoryPelli",
     "license": "MIT",
-    "engines": {
-        "node": ">=14.13.1"
+    "repository": {
+        "url": "https://github.com/lorypelli/server"
     },
     "devDependencies": {
         "@types/node": "^22.13.10",
-        "husky": "^9.1.7",
         "prettier": "^3.5.3",
         "prettier-plugin-organize-imports": "^4.1.0",
-        "tsup": "^8.4.0"
-    },
-    "dependencies": {
-        "chalk": "^5.4.1",
-        "node-fetch-native": "^1.6.6"
+        "tsdown": "^0.23.0"
     }
 }

@@ -1,17 +1,16 @@
 package internal
 
-import (
-	"net"
-)
+import "net"
 
 func GetLocalIP() string {
 	addrs, err := net.InterfaceAddrs()
-	if err == nil {
-		for _, addr := range addrs {
-			if address, ok := addr.(*net.IPNet); ok && address.IP.To4() != nil && address.IP.IsPrivate() {
-				return address.IP.String()
-			}
+	if err != nil {
+		return LocalIP
+	}
+	for _, addr := range addrs {
+		if ip, ok := addr.(*net.IPNet); ok && ip.IP.To4() != nil && ip.IP.IsPrivate() {
+			return ip.IP.String()
 		}
 	}
-	return LOCAL_IP
+	return LocalIP
 }

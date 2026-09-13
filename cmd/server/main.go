@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -11,126 +12,159 @@ import (
 	"github.com/pterm/pterm"
 )
 
+type flags struct {
+	dir      string
+	ext      string
+	name     string
+	port     string
+	username string
+	password string
+	yes      bool
+	given    map[string]bool
+}
+
 func main() {
-	dir := flag.String("dir", internal.DEFAULT_DIR, "Directory to serve")
-	flag.StringVar(dir, "d", *dir, "Alias for --dir (-d)")
-	ext := flag.String("ext", internal.DEFAULT_EXT, "Extension to use")
-	flag.StringVar(ext, "e", *ext, "Alias for --ext (-e)")
-	name := flag.String("name", "", "App name")
-	flag.StringVar(name, "n", *name, "Alias for --name (-n)")
-	port := flag.String("port", internal.DEFAULT_PORT, "Port to use")
-	flag.StringVar(port, "p", *port, "Alias for --port (-p)")
-	username := flag.String("username", "", "Username for authentication")
-	flag.StringVar(username, "user", *username, "Alias for --username (-user)")
-	password := flag.String("password", "", "Password for authentication")
-	flag.StringVar(password, "pwd", *password, "Alias for --password (-pwd)")
-	skip := flag.Bool("yes", false, "Skip questions")
-	flag.BoolVar(skip, "y", *skip, "Alias for --yes (-y)")
+	f := parse()
+	var o pkg.Options
+	if f.yes || confirm("Do you want to use defaults options?", true) {
+		o = defaults(f)
+	} else {
+		o = interactive(f)
+	}
+	pkg.Start(o)
+}
+
+func parse() flags {
+	var f flags
+	stringFlag(&f.dir, "dir", "d", internal.DefaultDir, "Directory to serve")
+	stringFlag(&f.ext, "ext", "e", internal.DefaultExt, "Extension to use")
+	stringFlag(&f.name, "name", "n", "", "App name")
+	stringFlag(&f.port, "port", "p", internal.DefaultPort, "Port to use")
+	stringFlag(&f.username, "username", "user", "", "Username for authentication")
+	stringFlag(&f.password, "password", "pwd", "", "Password for authentication")
+	flag.BoolVar(&f.yes, "yes", false, "Skip questions")
+	flag.BoolVar(&f.yes, "y", false, "Alias for --yes (-y)")
 	flag.CommandLine.Usage = pkg.Help
 	flag.Parse()
-	*dir = strings.TrimSpace(*dir)
-	*ext = strings.TrimSpace(*ext)
-	*name = strings.TrimSpace(*name)
-	*port = strings.TrimSpace(*port)
-	*username = strings.TrimSpace(*username)
-	*password = strings.TrimSpace(*password)
-	var hasDir bool
-	var hasExt bool
-	var hasPort bool
-	var defaults bool
-	var extension bool
-	var realtime bool
-	var network bool
-	if *skip {
-		defaults = true
-	} else {
-		defaults, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(true).Show("Do you want to use defaults options?")
+	f.given = make(map[string]bool)
+	flag.Visit(func(fl *flag.Flag) {
+		f.given[fl.Name] = true
+	})
+	for _, s := range []*string{&f.dir, &f.ext, &f.name, &f.port, &f.username, &f.password} {
+		*s = strings.TrimSpace(*s)
 	}
-	if defaults {
-		if _, err := os.Stat(*dir); err != nil {
-			internal.Exit(err)
-		}
-		extension = internal.DEFAULT_USE_EXT
-		realtime = internal.DEFAULT_USE_REALTIME
-		network = internal.DEFAULT_EXPOSE_NETWORK
-	} else {
-		flag.Visit(func(f *flag.Flag) {
-			switch f.Name {
-			case "d":
-			case "dir":
-				{
-					hasDir = true
-					break
-				}
-			case "e":
-			case "ext":
-				{
-					hasExt = true
-					break
-				}
-			case "p":
-			case "port":
-				{
-					hasPort = true
-					break
-				}
-			}
-		})
-		if !hasDir {
-			*dir = ""
-		}
-		if !hasExt {
-			*ext = ""
-		}
-		if !hasPort {
-			*port = ""
-		}
-		for *dir == "" {
-			*dir, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_DIR).Show("Provide directory to serve")
-			*dir = strings.TrimSpace(*dir)
-		}
-		if _, err := os.Stat(*dir); err != nil {
-			internal.Exit(err)
-		}
-		extension, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(internal.DEFAULT_USE_EXT).Show("Do you want to use the HTML extension?")
-		realtime, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(internal.DEFAULT_USE_REALTIME).Show("Do you want to have realtime loading for HTML files?")
-		if realtime {
-			pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", internal.WS_PORT)
-		}
-		network, _ = pterm.DefaultInteractiveConfirm.WithDefaultValue(internal.DEFAULT_EXPOSE_NETWORK).Show("Do you want to expose also to the local network?")
-		for *ext == "" {
-			*ext, _ = pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm", "..."}).WithDefaultOption(internal.DEFAULT_EXT).Show("Choose HTML extension")
-			*ext = strings.TrimSpace(*ext)
-			if *ext == "..." {
-				*ext, _ = pterm.DefaultInteractiveTextInput.Show("Provide extension to use")
-				*ext = strings.TrimSpace(*ext)
-			}
-		}
-		if *name == "" {
-			*name, _ = pterm.DefaultInteractiveTextInput.Show("Provide app name")
-			*name = strings.TrimSpace(*name)
-		}
-		for *port == "" {
-			*port, _ = pterm.DefaultInteractiveTextInput.WithDefaultValue(internal.DEFAULT_PORT).Show("Provide port to use")
-			*port = strings.TrimSpace(*port)
-		}
-		if *username == "" {
-			*username, _ = pterm.DefaultInteractiveTextInput.Show("Provide username for authentication")
-			*username = strings.TrimSpace(*username)
-		}
-		if *password == "" {
-			*password, _ = pterm.DefaultInteractiveTextInput.Show("Provide password for authentication")
-			*password = strings.TrimSpace(*password)
-		}
+	return f
+}
+
+func stringFlag(p *string, name, alias, value, usage string) {
+	flag.StringVar(p, name, value, usage)
+	flag.StringVar(p, alias, value, fmt.Sprintf("Alias for --%s (-%s)", name, alias))
+}
+
+func (f flags) provided(name, alias string) bool {
+	return f.given[name] || f.given[alias]
+}
+
+func defaults(f flags) pkg.Options {
+	checkDir(f.dir)
+	return pkg.Options{
+		Dir:       f.dir,
+		Ext:       f.ext,
+		Name:      f.name,
+		Username:  f.username,
+		Password:  f.password,
+		Port:      parsePort(f.port),
+		Extension: internal.DefaultUseExt,
+		Realtime:  internal.DefaultUseRealtime,
+		Network:   internal.DefaultExposeNetwork,
 	}
-	p, err := strconv.Atoi(*port)
+}
+
+func interactive(f flags) pkg.Options {
+	dir := f.dir
+	if !f.provided("dir", "d") || dir == "" {
+		dir = askRequired("Provide directory to serve", internal.DefaultDir)
+	}
+	checkDir(dir)
+	extension := confirm("Do you want to use the HTML extension?", internal.DefaultUseExt)
+	realtime := confirm("Do you want to have realtime loading for HTML files?", internal.DefaultUseRealtime)
+	if realtime {
+		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", internal.WSPort)
+	}
+	network := confirm("Do you want to expose also to the local network?", internal.DefaultExposeNetwork)
+	ext := f.ext
+	if !f.provided("ext", "e") || ext == "" {
+		ext = askExtension()
+	}
+	name := f.name
+	if name == "" {
+		name = ask("Provide app name", "")
+	}
+	port := f.port
+	if !f.provided("port", "p") || port == "" {
+		port = askRequired("Provide port to use", internal.DefaultPort)
+	}
+	username := f.username
+	if username == "" {
+		username = ask("Provide username for authentication", "")
+	}
+	password := f.password
+	if password == "" {
+		password = ask("Provide password for authentication", "")
+	}
+	return pkg.Options{
+		Dir:       dir,
+		Ext:       ext,
+		Name:      name,
+		Username:  username,
+		Password:  password,
+		Port:      parsePort(port),
+		Extension: extension,
+		Realtime:  realtime,
+		Network:   network,
+	}
+}
+
+func checkDir(dir string) {
+	if _, err := os.Stat(dir); err != nil {
+		internal.Exit(err)
+	}
+}
+
+func parsePort(s string) uint16 {
+	port, err := strconv.ParseUint(s, 10, 16)
 	if err != nil {
 		internal.Exit(err)
 	}
-	go func() {
-		if realtime {
-			pkg.StartWebsocket(*dir, internal.WS_PORT)
+	return uint16(port)
+}
+
+func confirm(question string, value bool) bool {
+	answer, _ := pterm.DefaultInteractiveConfirm.WithDefaultValue(value).Show(question)
+	return answer
+}
+
+func ask(question, value string) string {
+	answer, _ := pterm.DefaultInteractiveTextInput.WithDefaultValue(value).Show(question)
+	return strings.TrimSpace(answer)
+}
+
+func askRequired(question, value string) string {
+	for {
+		if answer := ask(question, value); answer != "" {
+			return answer
 		}
-	}()
-	pkg.Start(*dir, *ext, *name, *username, *password, extension, network, realtime, uint16(p))
+	}
+}
+
+func askExtension() string {
+	for {
+		choice, _ := pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm", "..."}).WithDefaultOption(internal.DefaultExt).Show("Choose HTML extension")
+		if choice == "..." {
+			choice = ask("Provide extension to use", "")
+		}
+		if choice = strings.TrimSpace(choice); choice != "" {
+			return choice
+		}
+	}
 }

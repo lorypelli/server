@@ -1,30 +1,11 @@
 package styles
 
 import (
-	"embed"
-
-	"github.com/pterm/pterm"
-	"github.com/tdewolff/minify/v2/minify"
+	_ "embed"
+	"fmt"
 )
 
-//go:embed *.css
-var css embed.FS
+//go:embed style.css
+var source string
 
-func RenderCSS(f string) string {
-	var minified string
-	switch f {
-	case "main":
-		{
-			file, _ := css.ReadFile("style.css")
-			minified, _ = minify.CSS(string(file))
-			break
-		}
-	case "error":
-		{
-			file, _ := css.ReadFile("error.css")
-			minified, _ = minify.CSS(string(file))
-			break
-		}
-	}
-	return pterm.Sprintf("<style>%s</style>", minified)
-}
+var CSS = fmt.Sprintf("<style>%s</style>", source)

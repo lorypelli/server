@@ -1,43 +1,24 @@
 package frontend
 
 import (
+	"fmt"
 	"github.com/lorypelli/server/frontend/components"
-	"github.com/lorypelli/server/frontend/styles"
-	"github.com/lorypelli/server/frontend/utils"
-	"path/filepath"
+	"io/fs"
 )
 
-templ Index(path string, dir string) {
-	<!DOCTYPE html>
-	<html lang="en">
-		<head>
-			<meta charset="UTF-8"/>
-			<meta name="viewport" content="width=device-width, initial-scale=1"/>
-			<title>Not Found!</title>
-			@templ.Raw(styles.RenderCSS("main"))
-		</head>
-		<body>
-			<span class="error">The page you were looking for wasn't found!</span>
-			<span>
-				if path != "/" {
-					<a href={ templ.URL(filepath.Dir(path)) }>
-						@components.BackArrow()
-					</a>
-				}
-				Contents of: <span class="dir">{ dir }</span>
-			</span>
-			{{ files := utils.GetFiles(dir) }}
-			if len(files) == 0 {
-				<div class="no_files">
-					<span class="no_files_error">NO FILES!</span>
-				</div>
-			} else {
-				<div class="files">
-					for _, file := range files {
-						@components.File(path, dir, file)
-					}
-				</div>
+templ Index(route string, entries []fs.DirEntry) {
+	@Layout(fmt.Sprintf("Index of %s", route)) {
+		@components.Breadcrumbs(route)
+		<ul class="entries">
+			if route != "/" {
+				@components.ParentEntry(route)
 			}
-		</body>
-	</html>
+			for _, entry := range entries {
+				@components.Entry(route, entry)
+			}
+			if len(entries) == 0 {
+				<li class="empty">This directory is empty</li>
+			}
+		</ul>
+	}
 }

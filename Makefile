@@ -1,23 +1,26 @@
 SRC := cmd/server/main.go
-TEMPL := github.com/a-h/templ/cmd/templ@latest
+ARCH ?= amd64
+BUILD := CGO_ENABLED=0 go build -trimpath -ldflags="-s -w"
+all: win32 linux darwin linux_arm64 darwin_arm64
 win32:
-	@GOOS=windows go build -o bin/server_$@.exe $(SRC)
+	@GOOS=windows GOARCH=$(ARCH) $(BUILD) -o bin/server_$@.exe $(SRC)
 linux:
-	@GOOS=linux go build -o bin/server_$@ $(SRC)
+	@GOOS=linux GOARCH=$(ARCH) $(BUILD) -o bin/server_$@ $(SRC)
 darwin:
-	@GOOS=darwin go build -o bin/server_$@ $(SRC)
-watch:
-	@go run $(TEMPL) fmt . && go run $(TEMPL) generate --watch
+	@GOOS=darwin GOARCH=$(ARCH) $(BUILD) -o bin/server_$@ $(SRC)
+linux_arm64:
+	@GOOS=linux GOARCH=arm64 $(BUILD) -o bin/server_$@ $(SRC)
+darwin_arm64:
+	@GOOS=darwin GOARCH=arm64 $(BUILD) -o bin/server_$@ $(SRC)
+generate:
+	@go tool templ generate
 act:
 	@act -s GITHUB_TOKEN="$(shell gh auth token)"
 update:
 	@go get -u ./... && go mod tidy
-format:
-	@go fmt ./...
 run:
 	@go run $(SRC) $(filter-out $@,$(MAKECMDGOALS))
 docker:
 	@docker build . -t server
-all: win32 linux darwin
 %:
 	@:

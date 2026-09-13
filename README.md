@@ -40,12 +40,28 @@ curl -o server.exe https://github.com/lorypelli/server/releases/download/release
 
 ### For Linux
 
+##### x64:
+
 ```sh
 curl -Lo server https://github.com/lorypelli/server/releases/download/release/server_linux
 ```
 
+##### ARM64:
+
+```sh
+curl -Lo server https://github.com/lorypelli/server/releases/download/release/server_linux_arm64
+```
+
 ### For MacOS
+
+##### Intel:
 
 ```sh
 curl -Lo server https://github.com/lorypelli/server/releases/download/release/server_darwin
+```
+
+##### Apple Silicon:
+
+```sh
+curl -Lo server https://github.com/lorypelli/server/releases/download/release/server_darwin_arm64
 ```
