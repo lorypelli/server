@@ -1,7 +1,7 @@
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { arch, platform } from 'node:process';
-import { error } from './logs.ts';
+import { error } from './logs.js';
 
 const goos: Partial<Record<NodeJS.Platform, string>> = {
     darwin: 'darwin',

@@ -1,7 +1,7 @@
 import { createWriteStream } from 'node:fs';
 import { access, chmod, readFile, writeFile } from 'node:fs/promises';
 import { pipeline } from 'node:stream/promises';
-import { etag, file, url } from './constants.ts';
+import { etag, file, url } from './constants.js';
 
 export default async function download() {
     const headers = new Headers();

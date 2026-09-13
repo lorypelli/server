@@ -2,9 +2,9 @@
 
 import { spawnSync } from 'node:child_process';
 import { argv, exit } from 'node:process';
-import { file } from './utils/constants.ts';
-import download from './utils/download.ts';
-import { error, info } from './utils/logs.ts';
+import { file } from './utils/constants.js';
+import download from './utils/download.js';
+import { error, info } from './utils/logs.js';
 
 /**
  * The package name and version, replaced at build time by tsdown's `define`.
