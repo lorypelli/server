@@ -7,13 +7,13 @@ import (
 	"net/http"
 )
 
-templ Error(route string, status int) {
-	@Layout(http.StatusText(status)) {
+templ Error(route string, status int, view utils.View) {
+	@layout(http.StatusText(status)) {
 		<section class="error">
 			<h1>{ fmt.Sprint(status) }</h1>
 			<p>{ http.StatusText(status) }</p>
 			<code>{ route }</code>
-			<a class="button" href={ utils.Parent(route) }>
+			<a class="button" href={ utils.Parent(route, view) }>
 				@components.ArrowLeftIcon()
 				<span>Go back</span>
 			</a>

@@ -9,19 +9,19 @@ import (
 	"time"
 )
 
-type Watcher struct {
+type watcher struct {
 	dir  string
 	mu   sync.Mutex
 	subs map[chan struct{}]struct{}
 }
 
-func Watch(dir string) *Watcher {
-	w := &Watcher{dir: dir, subs: make(map[chan struct{}]struct{})}
+func watch(dir string) *watcher {
+	w := &watcher{dir: dir, subs: make(map[chan struct{}]struct{})}
 	go w.run()
 	return w
 }
 
-func (w *Watcher) Subscribe() (<-chan struct{}, func()) {
+func (w *watcher) subscribe() (<-chan struct{}, func()) {
 	ch := make(chan struct{}, 1)
 	w.mu.Lock()
 	w.subs[ch] = struct{}{}
@@ -33,7 +33,7 @@ func (w *Watcher) Subscribe() (<-chan struct{}, func()) {
 	}
 }
 
-func (w *Watcher) run() {
+func (w *watcher) run() {
 	var previous map[string]time.Time
 	for range time.Tick(time.Second) {
 		if !w.subscribed() {
@@ -48,13 +48,13 @@ func (w *Watcher) run() {
 	}
 }
 
-func (w *Watcher) subscribed() bool {
+func (w *watcher) subscribed() bool {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	return len(w.subs) > 0
 }
 
-func (w *Watcher) broadcast() {
+func (w *watcher) broadcast() {
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	for ch := range w.subs {

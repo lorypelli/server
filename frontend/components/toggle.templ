@@ -1,0 +1,13 @@
+package components
+
+import "github.com/lorypelli/server/frontend/utils"
+
+templ ViewToggle(view utils.View) {
+	<a class="toggle" href={ view.Toggle().Href() }>
+		if view == utils.GridView {
+			@listIcon()
+		} else {
+			@gridIcon()
+		}
+	</a>
+}

@@ -181,13 +181,15 @@ func askPort(question string, value uint16) uint16 {
 	}
 }
 
+const customExt = "..."
+
 func askExtension() string {
 	for {
-		choice, _ := pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm", "..."}).WithDefaultOption(internal.DefaultExt).Show("Choose HTML extension")
-		if choice == "..." {
+		choice, _ := pterm.DefaultInteractiveSelect.WithOptions([]string{".html", ".htm", customExt}).WithDefaultOption(internal.DefaultExt).Show("Choose HTML extension")
+		if choice == customExt {
 			choice = ask("Provide extension to use", "")
 		}
-		if choice = strings.TrimSpace(choice); choice != "" {
+		if choice != "" {
 			return choice
 		}
 	}

@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/lorypelli/server/frontend"
+	"github.com/lorypelli/server/frontend/utils"
 	"github.com/pterm/pterm"
 )
 
@@ -26,10 +27,10 @@ func ErrorHandler(ctx fiber.Ctx, err error) error {
 		pterm.Error.Println(err)
 	}
 	ctx.Status(status)
-	return Render(ctx, frontend.Error(ctx.Path(), status))
+	return render(ctx, frontend.Error(ctx.Path(), status, utils.ParseView(ctx.Query("view"))))
 }
 
-func Classify(err error) error {
+func classify(err error) error {
 	switch {
 	case errors.Is(err, fs.ErrNotExist):
 		return fiber.ErrNotFound

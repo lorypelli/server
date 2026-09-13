@@ -9,11 +9,11 @@ import (
 var reload = []byte("reload")
 
 func serveWebsocket(dir string, network bool) {
-	watcher := Watch(dir)
+	w := watch(dir)
 	app := fiber.New()
 	app.Get("/", websocket.New(func(conn *websocket.Conn) {
 		defer conn.Close()
-		changes, unsubscribe := watcher.Subscribe()
+		changes, unsubscribe := w.subscribe()
 		defer unsubscribe()
 		closed := make(chan struct{})
 		go func() {

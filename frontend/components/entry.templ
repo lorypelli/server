@@ -6,25 +6,25 @@ import (
 	"io/fs"
 )
 
-templ Entry(route string, entry fs.DirEntry) {
+templ Entry(route string, entry fs.DirEntry, view utils.View) {
 	<li>
 		if entry.IsDir() {
-			<a class="entry folder" href={ utils.Folder(route, entry.Name()) }>
-				@FolderIcon()
+			<a class="entry folder" href={ utils.Folder(route, entry.Name(), view) }>
+				@folderIcon()
 				<span>{ fmt.Sprintf("%s/", entry.Name()) }</span>
 			</a>
 		} else {
 			<a class="entry" href={ utils.File(route, entry.Name()) }>
-				@FileIcon()
+				@fileIcon()
 				<span>{ entry.Name() }</span>
 			</a>
 		}
 	</li>
 }
 
-templ ParentEntry(route string) {
+templ ParentEntry(route string, view utils.View) {
 	<li>
-		<a class="entry parent" href={ utils.Parent(route) }>
+		<a class="entry parent" href={ utils.Parent(route, view) }>
 			@ArrowLeftIcon()
 			<span>Parent directory</span>
 		</a>

@@ -20,15 +20,15 @@ func Listing(dir string) fiber.Handler {
 		target := filepath.Join(dir, unescaped)
 		info, err := os.Stat(target)
 		if err != nil {
-			return Classify(err)
+			return classify(err)
 		}
 		if !info.IsDir() {
 			return fiber.ErrForbidden
 		}
 		entries, err := utils.Entries(target)
 		if err != nil {
-			return Classify(err)
+			return classify(err)
 		}
-		return Render(ctx, frontend.Index(route, entries))
+		return render(ctx, frontend.Index(route, entries, utils.ParseView(ctx.Query("view"))))
 	}
 }

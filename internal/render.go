@@ -5,7 +5,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func Render(ctx fiber.Ctx, component templ.Component) error {
+func render(ctx fiber.Ctx, component templ.Component) error {
 	ctx.Set(fiber.HeaderContentType, fiber.MIMETextHTML)
 	return component.Render(ctx.Context(), ctx.Response().BodyWriter())
 }

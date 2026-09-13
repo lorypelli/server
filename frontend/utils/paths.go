@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"path"
 	"strings"
 
@@ -13,35 +12,29 @@ type Crumb struct {
 	Href templ.SafeURL
 }
 
-func Parent(route string) templ.SafeURL {
-	return Dir(path.Dir(path.Clean(route)))
+func Parent(route string, view View) templ.SafeURL {
+	return Dir(path.Dir(path.Clean(route)), view)
 }
 
 func File(route, name string) templ.SafeURL {
 	return templ.URL(path.Join(route, name))
 }
 
-func Folder(route, name string) templ.SafeURL {
-	return Dir(path.Join(route, name))
+func Folder(route, name string, view View) templ.SafeURL {
+	return Dir(path.Join(route, name), view)
 }
 
-func Dir(route string) templ.SafeURL {
-	if route == "/" {
-		return templ.URL(route)
-	}
-	return templ.URL(fmt.Sprintf("%s/", route))
+func Dir(route string, view View) templ.SafeURL {
+	return view.location(route)
 }
 
-func Crumbs(route string) []Crumb {
-	segments := strings.Split(strings.Trim(path.Clean(route), "/"), "/")
-	if segments[0] == "" {
-		return nil
-	}
+func Crumbs(route string, view View) []Crumb {
+	segments := strings.FieldsFunc(path.Clean(route), func(r rune) bool { return r == '/' })
 	crumbs := make([]Crumb, len(segments))
-	href := ""
+	href := "/"
 	for i, segment := range segments {
-		href = fmt.Sprintf("%s/%s", href, segment)
-		crumbs[i] = Crumb{Name: segment, Href: Dir(href)}
+		href = path.Join(href, segment)
+		crumbs[i] = Crumb{Name: segment, Href: Dir(href, view)}
 	}
 	return crumbs
 }

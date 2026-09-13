@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"net/url"
 	"os"
 	"path/filepath"
@@ -23,7 +22,7 @@ func TrailingSlash(dir string) fiber.Handler {
 		if info, err := os.Stat(filepath.Join(dir, unescaped)); err != nil || !info.IsDir() {
 			return ctx.Next()
 		}
-		target := fmt.Sprintf("%s/", route)
-		return ctx.Redirect().Status(fiber.StatusFound).To(target)
+		target := url.URL{Path: unescaped, RawQuery: string(ctx.Request().URI().QueryString())}
+		return ctx.Redirect().Status(fiber.StatusFound).To(target.JoinPath("/").String())
 	}
 }

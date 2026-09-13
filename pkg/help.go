@@ -9,13 +9,13 @@ import (
 )
 
 func Help() {
-	var b strings.Builder
+	var lines []string
 	flag.VisitAll(func(f *flag.Flag) {
-		fmt.Fprintf(&b, "%s - %s", f.Name, f.Usage)
+		line := fmt.Sprintf("%s - %s", f.Name, f.Usage)
 		if f.DefValue != "" {
-			fmt.Fprintf(&b, " (default: %q)", f.DefValue)
+			line = fmt.Sprintf("%s (default: %q)", line, f.DefValue)
 		}
-		b.WriteByte('\n')
+		lines = append(lines, line)
 	})
-	pterm.DefaultBox.WithTitle("Help Menu").WithTitleTopCenter().Println(strings.TrimSuffix(b.String(), "\n"))
+	pterm.DefaultBox.WithTitle("Help Menu").WithTitleTopCenter().Println(strings.Join(lines, "\n"))
 }

@@ -4,7 +4,11 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
+	"net"
+	"net/url"
+	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/gofiber/fiber/v3"
@@ -36,7 +40,7 @@ func Start(o Options) {
 	app.Use(recover.New())
 	app.Use(internal.TrailingSlash(o.Dir))
 	app.Use(static.New(o.Dir, static.Config{
-		IndexNames: []string{fmt.Sprintf("index%s", o.Ext)},
+		IndexNames: []string{withExt("index", o.Ext)},
 		ByteRange:  true,
 	}))
 	if !o.Extension {
@@ -59,8 +63,8 @@ func basicAuth(username, password string) fiber.Handler {
 func implicitExtension(dir, ext string) fiber.Handler {
 	return func(ctx fiber.Ctx) error {
 		route := ctx.Path()
-		if !strings.Contains(route, ".") {
-			if err := ctx.SendFile(filepath.Join(dir, fmt.Sprintf("%s%s", route, ext))); err == nil {
+		if path.Ext(route) == "" {
+			if err := ctx.SendFile(filepath.Join(dir, withExt(route, ext))); err == nil {
 				return nil
 			}
 		}
@@ -68,14 +72,26 @@ func implicitExtension(dir, ext string) fiber.Handler {
 	}
 }
 
+func withExt(name, ext string) string {
+	return fmt.Sprint(name, ext)
+}
+
 func announce(name string, network bool, port uint16) {
-	msg := fmt.Sprintf("Local: http://%s:%d", internal.LocalIP, port)
+	lines := []string{fmt.Sprintf("Local: %s", httpURL(internal.LocalIP, port))}
 	if network {
 		if ip := internal.GetLocalIP(); ip != internal.LocalIP {
-			msg = fmt.Sprintf("%s\nNetwork: http://%s:%d", msg, ip, port)
+			lines = append(lines, fmt.Sprintf("Network: %s", httpURL(ip, port)))
 		}
 	}
-	pterm.DefaultBox.WithTitle(name).WithTitleTopCenter().Println(msg)
+	pterm.DefaultBox.WithTitle(name).WithTitleTopCenter().Println(strings.Join(lines, "\n"))
+}
+
+func httpURL(host string, port uint16) string {
+	return (&url.URL{Scheme: "http", Host: address(host, port)}).String()
+}
+
+func address(host string, port uint16) string {
+	return net.JoinHostPort(host, strconv.Itoa(int(port)))
 }
 
 func listen(app *fiber.App, network bool, port uint16) {
@@ -83,7 +99,7 @@ func listen(app *fiber.App, network bool, port uint16) {
 	if network {
 		host = ""
 	}
-	if err := app.Listen(fmt.Sprintf("%s:%d", host, port), fiber.ListenConfig{DisableStartupMessage: true}); err != nil {
+	if err := app.Listen(address(host, port), fiber.ListenConfig{DisableStartupMessage: true}); err != nil {
 		internal.Exit(err)
 	}
 }
