@@ -16,7 +16,7 @@ type flags struct {
 	dir      string
 	ext      string
 	name     string
-	port     string
+	port     uint16
 	username string
 	password string
 	yes      bool
@@ -39,7 +39,7 @@ func parse() flags {
 	stringFlag(&f.dir, "dir", "d", internal.DefaultDir, "Directory to serve")
 	stringFlag(&f.ext, "ext", "e", internal.DefaultExt, "Extension to use")
 	stringFlag(&f.name, "name", "n", "", "App name")
-	stringFlag(&f.port, "port", "p", internal.DefaultPort, "Port to use")
+	portFlag(&f.port, "port", "p", internal.DefaultPort, "Port to use")
 	stringFlag(&f.username, "username", "user", "", "Username for authentication")
 	stringFlag(&f.password, "password", "pwd", "", "Password for authentication")
 	flag.BoolVar(&f.yes, "yes", false, "Skip questions")
@@ -50,7 +50,7 @@ func parse() flags {
 	flag.Visit(func(fl *flag.Flag) {
 		f.given[fl.Name] = true
 	})
-	for _, s := range []*string{&f.dir, &f.ext, &f.name, &f.port, &f.username, &f.password} {
+	for _, s := range []*string{&f.dir, &f.ext, &f.name, &f.username, &f.password} {
 		*s = strings.TrimSpace(*s)
 	}
 	return f
@@ -59,6 +59,25 @@ func parse() flags {
 func stringFlag(p *string, name, alias, value, usage string) {
 	flag.StringVar(p, name, value, usage)
 	flag.StringVar(p, alias, value, fmt.Sprintf("Alias for --%s (-%s)", name, alias))
+}
+
+func portFlag(p *uint16, name, alias string, value uint16, usage string) {
+	*p = value
+	v := (*portValue)(p)
+	flag.Var(v, name, usage)
+	flag.Var(v, alias, fmt.Sprintf("Alias for --%s (-%s)", name, alias))
+}
+
+type portValue uint16
+
+func (p *portValue) String() string {
+	return strconv.Itoa(int(*p))
+}
+
+func (p *portValue) Set(s string) error {
+	port, err := parsePort(s)
+	*p = portValue(port)
+	return err
 }
 
 func (f flags) provided(name, alias string) bool {
@@ -73,7 +92,7 @@ func defaults(f flags) pkg.Options {
 		Name:      f.name,
 		Username:  f.username,
 		Password:  f.password,
-		Port:      parsePort(f.port),
+		Port:      f.port,
 		Extension: internal.DefaultUseExt,
 		Realtime:  internal.DefaultUseRealtime,
 		Network:   internal.DefaultExposeNetwork,
@@ -101,8 +120,8 @@ func interactive(f flags) pkg.Options {
 		name = ask("Provide app name", "")
 	}
 	port := f.port
-	if !f.provided("port", "p") || port == "" {
-		port = askRequired("Provide port to use", internal.DefaultPort)
+	if !f.provided("port", "p") {
+		port = askPort("Provide port to use", internal.DefaultPort)
 	}
 	username := f.username
 	if username == "" {
@@ -118,7 +137,7 @@ func interactive(f flags) pkg.Options {
 		Name:      name,
 		Username:  username,
 		Password:  password,
-		Port:      parsePort(port),
+		Port:      port,
 		Extension: extension,
 		Realtime:  realtime,
 		Network:   network,
@@ -131,12 +150,9 @@ func checkDir(dir string) {
 	}
 }
 
-func parsePort(s string) uint16 {
-	port, err := strconv.ParseUint(s, 10, 16)
-	if err != nil {
-		internal.Exit(err)
-	}
-	return uint16(port)
+func parsePort(s string) (uint16, error) {
+	port, err := strconv.ParseUint(strings.TrimSpace(s), 10, 16)
+	return uint16(port), err
 }
 
 func confirm(question string, value bool) bool {
@@ -153,6 +169,14 @@ func askRequired(question, value string) string {
 	for {
 		if answer := ask(question, value); answer != "" {
 			return answer
+		}
+	}
+}
+
+func askPort(question string, value uint16) uint16 {
+	for {
+		if port, err := parsePort(ask(question, strconv.Itoa(int(value)))); err == nil {
+			return port
 		}
 	}
 }

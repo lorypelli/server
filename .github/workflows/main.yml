@@ -5,30 +5,28 @@ on:
         branches:
             - main
 
+permissions:
+    contents: write
+
 jobs:
     publish:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Repository
-              uses: actions/checkout@master
-              with:
-                  ref: main
-                  fetch-depth: 0
+              uses: actions/checkout@v7
             - name: Set up Go
-              uses: actions/setup-go@master
+              uses: actions/setup-go@v7
               with:
-                  go-version: '1.27.1'
-            - name: Installing Packages
-              run: go mod tidy
+                  go-version-file: go.mod
             - name: Generate Templ Code
-              run: go tool templ generate
+              run: make generate
             - name: Build Project
-              run: make all
+              run: make
             - name: Create Release
-              uses: softprops/action-gh-release@master
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              if: github.actor != 'nektos/act'
+              uses: softprops/action-gh-release@v3
               with:
                   name: Release
                   tag_name: release
                   files: bin/*
+                  fail_on_unmatched_files: true
