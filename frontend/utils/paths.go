@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"net/url"
 	"path"
 	"strings"
 
@@ -17,7 +18,7 @@ func Parent(route string, view View) templ.SafeURL {
 }
 
 func File(route, name string) templ.SafeURL {
-	return templ.URL(path.Join(route, name))
+	return templ.URL((&url.URL{Path: path.Join(route, name)}).String())
 }
 
 func Folder(route, name string, view View) templ.SafeURL {

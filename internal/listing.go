@@ -25,10 +25,10 @@ func Listing(dir string) fiber.Handler {
 		if !info.IsDir() {
 			return fiber.ErrForbidden
 		}
-		entries, err := utils.Entries(target)
+		listing, err := utils.ReadDir(target)
 		if err != nil {
 			return classify(err)
 		}
-		return render(ctx, frontend.Index(route, entries, utils.ParseView(ctx.Query("view"))))
+		return render(ctx, frontend.Index(unescaped, listing, utils.ParseView(ctx.Query("view"))))
 	}
 }

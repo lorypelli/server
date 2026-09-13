@@ -3,30 +3,42 @@ package components
 import (
 	"fmt"
 	"github.com/lorypelli/server/frontend/utils"
-	"io/fs"
 )
 
-templ Entry(route string, entry fs.DirEntry, view utils.View) {
+templ Entry(route string, entry utils.Entry, view utils.View) {
 	<li>
-		if entry.IsDir() {
-			<a class="entry folder" href={ utils.Folder(route, entry.Name(), view) }>
+		if entry.IsDir {
+			<a class="entry folder" href={ utils.Folder(route, entry.Name, view) } title={ entry.Name }>
 				@folderIcon()
-				<span>{ fmt.Sprintf("%s/", entry.Name()) }</span>
+				<span class="name">{ fmt.Sprintf("%s/", entry.Name) }</span>
+				@meta(entry)
 			</a>
 		} else {
-			<a class="entry" href={ utils.File(route, entry.Name()) }>
+			<a class="entry" href={ utils.File(route, entry.Name) } title={ entry.Name }>
 				@fileIcon()
-				<span>{ entry.Name() }</span>
+				<span class="name">{ entry.Name }</span>
+				@meta(entry)
 			</a>
 		}
 	</li>
+}
+
+templ meta(entry utils.Entry) {
+	<span class="meta">
+		if !entry.IsDir {
+			<span class="size">{ utils.Size(entry.Size) }</span>
+		}
+		if !entry.ModTime.IsZero() {
+			<time datetime={ utils.Timestamp(entry.ModTime) }>{ utils.Date(entry.ModTime) }</time>
+		}
+	</span>
 }
 
 templ ParentEntry(route string, view utils.View) {
 	<li>
 		<a class="entry parent" href={ utils.Parent(route, view) }>
 			@ArrowLeftIcon()
-			<span>Parent directory</span>
+			<span class="name">Parent directory</span>
 		</a>
 	</li>
 }

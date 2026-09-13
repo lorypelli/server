@@ -1,0 +1,11 @@
+package components
+
+import "github.com/lorypelli/server/frontend/utils"
+
+templ Summary(listing utils.Listing) {
+	<p class="summary">
+		<span>{ utils.Count(listing.Folders, "folder") }</span>
+		<span>{ utils.Count(listing.Files, "file") }</span>
+		<span>{ utils.Size(listing.Size) }</span>
+	</p>
+}

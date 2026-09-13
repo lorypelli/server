@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"io/fs"
+	"net/url"
 
 	"github.com/gofiber/fiber/v3"
 	"github.com/lorypelli/server/frontend"
@@ -27,7 +28,15 @@ func ErrorHandler(ctx fiber.Ctx, err error) error {
 		pterm.Error.Println(err)
 	}
 	ctx.Status(status)
-	return render(ctx, frontend.Error(ctx.Path(), status, utils.ParseView(ctx.Query("view"))))
+	return render(ctx, frontend.Error(displayPath(ctx), status, utils.ParseView(ctx.Query("view"))))
+}
+
+func displayPath(ctx fiber.Ctx) string {
+	route := ctx.Path()
+	if unescaped, err := url.PathUnescape(route); err == nil {
+		return unescaped
+	}
+	return route
 }
 
 func classify(err error) error {

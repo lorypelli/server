@@ -12,7 +12,7 @@ func Logger() fiber.Handler {
 	return func(ctx fiber.Ctx) error {
 		err := ctx.Next()
 		status := ctx.Response().StatusCode()
-		msg := fmt.Sprintf("%s (%d): %s - %s (IP: %s)", time.Now().Format("15:04:05"), status, ctx.Method(), ctx.Path(), ctx.IP())
+		msg := fmt.Sprintf("%s (%d): %s - %s (IP: %s)", time.Now().Format(time.DateTime), status, ctx.Method(), ctx.Path(), ctx.IP())
 		switch {
 		case status >= 500:
 			pterm.Error.Println(msg)
