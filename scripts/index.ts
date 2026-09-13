@@ -7,11 +7,12 @@ import download from './utils/download.ts';
 import { error, info } from './utils/logs.ts';
 
 /**
- * The package version, replaced at build time by tsdown's `define`.
+ * The package name and version, replaced at build time by tsdown's `define`.
  */
+declare const NAME: string;
 declare const VERSION: string;
 
-info(`Welcome to fcy@${VERSION}!`);
+info(`Welcome to ${NAME}@${VERSION}!`);
 
 await download().catch(error);
 
