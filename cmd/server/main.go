@@ -42,8 +42,7 @@ func parse() flags {
 	portFlag(&f.port, "port", "p", internal.DefaultPort, "Port to use")
 	stringFlag(&f.username, "username", "user", "", "Username for authentication")
 	stringFlag(&f.password, "password", "pwd", "", "Password for authentication")
-	flag.BoolVar(&f.yes, "yes", false, "Skip questions")
-	flag.BoolVar(&f.yes, "y", false, "Alias for --yes (-y)")
+	boolFlag(&f.yes, "yes", "y", "Skip questions and use defaults")
 	flag.CommandLine.Usage = pkg.Help
 	flag.Parse()
 	f.given = make(map[string]bool)
@@ -58,14 +57,19 @@ func parse() flags {
 
 func stringFlag(p *string, name, alias, value, usage string) {
 	flag.StringVar(p, name, value, usage)
-	flag.StringVar(p, alias, value, fmt.Sprintf("Alias for --%s (-%s)", name, alias))
+	flag.StringVar(p, alias, value, usage)
+}
+
+func boolFlag(p *bool, name, alias, usage string) {
+	flag.BoolVar(p, name, false, usage)
+	flag.BoolVar(p, alias, false, usage)
 }
 
 func portFlag(p *uint16, name, alias string, value uint16, usage string) {
 	*p = value
 	v := (*portValue)(p)
 	flag.Var(v, name, usage)
-	flag.Var(v, alias, fmt.Sprintf("Alias for --%s (-%s)", name, alias))
+	flag.Var(v, alias, usage)
 }
 
 type portValue uint16
@@ -94,7 +98,6 @@ func defaults(f flags) pkg.Options {
 		Password:  f.password,
 		Port:      f.port,
 		Extension: internal.DefaultUseExt,
-		Realtime:  internal.DefaultUseRealtime,
 		Network:   internal.DefaultExposeNetwork,
 	}
 }
@@ -106,10 +109,6 @@ func interactive(f flags) pkg.Options {
 	}
 	checkDir(dir)
 	extension := confirm("Do you want to use the HTML extension?", internal.DefaultUseExt)
-	realtime := confirm("Do you want to have realtime loading for HTML files?", internal.DefaultUseRealtime)
-	if realtime {
-		pterm.Warning.Printfln("Port %d can't be used since it's in use by the realtime service!", internal.WSPort)
-	}
 	network := confirm("Do you want to expose also to the local network?", internal.DefaultExposeNetwork)
 	ext := f.ext
 	if !f.provided("ext", "e") || ext == "" {
@@ -139,14 +138,17 @@ func interactive(f flags) pkg.Options {
 		Password:  password,
 		Port:      port,
 		Extension: extension,
-		Realtime:  realtime,
 		Network:   network,
 	}
 }
 
 func checkDir(dir string) {
-	if _, err := os.Stat(dir); err != nil {
-		internal.Exit(err)
+	info, err := os.Stat(dir)
+	if err != nil {
+		internal.Exit(fmt.Errorf("cannot serve %q: %w", dir, err))
+	}
+	if !info.IsDir() {
+		internal.Exit(fmt.Errorf("cannot serve %q: not a directory", dir))
 	}
 }
 

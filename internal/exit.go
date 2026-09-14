@@ -1,12 +1,8 @@
 package internal
 
-import (
-	"os"
-
-	"github.com/pterm/pterm"
-)
+import "os"
 
 func Exit(err error) {
-	pterm.Error.Println(err)
+	Error.Println(err)
 	os.Exit(1)
 }

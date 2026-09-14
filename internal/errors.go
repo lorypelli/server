@@ -8,7 +8,6 @@ import (
 	"github.com/gofiber/fiber/v3"
 	"github.com/lorypelli/server/frontend"
 	"github.com/lorypelli/server/frontend/utils"
-	"github.com/pterm/pterm"
 )
 
 func Errors() fiber.Handler {
@@ -25,7 +24,7 @@ func ErrorHandler(ctx fiber.Ctx, err error) error {
 	if e, ok := errors.AsType[*fiber.Error](err); ok {
 		status = e.Code
 	} else {
-		pterm.Error.Println(err)
+		Error.Log("%s %s: %v", ctx.Method(), displayPath(ctx), err)
 	}
 	ctx.Status(status)
 	return render(ctx, frontend.Error(displayPath(ctx), status, utils.ParseView(ctx.Query("view"))))
